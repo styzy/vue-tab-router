@@ -1,11 +1,11 @@
 {
   "name": "vue-tab-router",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "scripts": {
-    "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "dev": "vue-cli-service serve --open"
   },
   "dependencies": {
     "core-js": "^3.6.5",
@@ -14,6 +14,7 @@
     "vuex": "^3.4.0"
   },
   "devDependencies": {
+    "@prettier/plugin-pug": "^1.19.2",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
@@ -25,8 +26,12 @@
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^6.2.2",
     "prettier": "^2.2.1",
+    "style-resources-loader": "^1.4.1",
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2",
+    "vue-cli-plugin-markdown": "~0.1.2",
+    "vue-cli-plugin-pug": "~2.0.0",
+    "vue-cli-plugin-style-resources-loader": "~0.1.5",
     "vue-template-compiler": "^2.6.11"
   }
 }
