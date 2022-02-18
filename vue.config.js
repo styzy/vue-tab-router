@@ -1,6 +1,7 @@
 const path = require('path')
 
 module.exports = {
+	lintOnSave: false,
 	pages: {
 		index: {
 			entry: 'examples/main.js',
@@ -9,7 +10,10 @@ module.exports = {
 		}
 	},
 	chainWebpack: config => {
-		config.resolve.alias.set('@', path.resolve('examples')).set('~', path.resolve('packages'))
+		config.resolve.alias
+			.set('@', path.resolve('examples'))
+			.set('~', path.resolve('src'))
+			.set('#', path.resolve('src/utils'))
 		config.module.rule('js').include.add('/packages').end().use('babel').loader('babel-loader')
 	},
 	pluginOptions: {
@@ -19,6 +23,12 @@ module.exports = {
 				path.resolve(__dirname, './examples/assets/stylus/color.styl'),
 				path.resolve(__dirname, './examples/assets/stylus/global.styl')
 			]
+		}
+	},
+	devServer: {
+		overlay: {
+			warning: false,
+			errors: false
 		}
 	}
 }

@@ -1,8 +1,10 @@
 <template lang="pug">
 	.menu
-		.logo TabRouter
+		router-link(to='/guide')
+			.item 原生路由
 		template(v-for='menu in menuList')
-			.item(@click='menuClick(menu.path)') {{ menu.name }}
+			tab-router-link(:to='{ path: menu.path }')
+				.item {{ menu.name }}
 			.item.sub(@click='menuClick(subMenu.path)' v-for='subMenu in menu.children') {{ subMenu.name }}
 </template>
 
@@ -43,8 +45,7 @@ export default {
 	},
 	methods: {
 		menuClick(path) {
-			if (!path) return
-			console.log('path: ', path)
+			this.$tabRouter.open(path)
 		}
 	}
 }
@@ -52,26 +53,20 @@ export default {
 
 <style lang="stylus" scoped>
 .menu
-	background-color rgba($color-theme,0.2)
-	.logo
-		height 80px
-		line-height @height
-		font-size 40px
-		text-align center
-		background-color $color-theme
-		color #FFFFFF
 	.item
 		baseTrans()
-		height 60px
+		height 40px
 		padding-left 40px
+		margin-top: 10px
 		line-height @height
 		font-weight 700
 		color $color-theme
 		cursor pointer
 		&:hover
 			color darken($color-theme, 10%)
-			background-color rgba($color-theme,0.4)
+			background-color rgba($color-theme,0.1)
 		&.sub
+			margin-top: 0
 			padding-left 55px
 			font-weight 400
 </style>
