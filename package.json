@@ -1,11 +1,31 @@
 {
-	"name": "vue-tab-router",
+	"name": "@styzy/vue-tab-router",
 	"version": "0.1.0",
+	"description": "A Tab Router Plugins For Vue.js",
+	"keywords": [
+		"vue",
+		"router",
+		"tab",
+		"tab-router",
+		"plugin"
+	],
+	"author": {
+		"name": "STYZY",
+		"email": "styzyreal@126.com",
+		"url": "https://our.styzy.cn"
+	},
+	"bugs": {
+		"url": "https://github.com/styzy/vue-tab-router/issues",
+		"email": "styzyreal@126.com"
+	},
+	"repository": "https://github.com/styzy/vue-tab-router",
+	"homepage": "vue-tab-router.styzy.cn",
+	"main": "lib/vue-tab-touter.common.js",
 	"private": false,
 	"scripts": {
+		"dev": "vue-cli-service serve --open",
 		"build": "vue-cli-service build",
-		"lint": "vue-cli-service lint",
-		"dev": "vue-cli-service serve --open"
+		"lib": "vue-cli-service build --target lib --name vue-tab-route --dest lib src/index.js"
 	},
 	"dependencies": {
 		"core-js": "^3.6.5",

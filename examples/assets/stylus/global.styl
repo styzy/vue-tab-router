@@ -1,8 +1,8 @@
 baseAcf()
 	&:after
 		display block
-		content ""
 		clear both
+		content ''
 		zoom 1
-baseTrans()
-	transition 0.3s
+baseTrans(duration = 0.3s)
+	transition duration

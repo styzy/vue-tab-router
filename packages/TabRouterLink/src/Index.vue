@@ -1,31 +1,53 @@
 <script>
+import { core } from '~/mixins'
+
 export default {
 	name: 'TabRouterLink',
+	mixins: [core],
 	props: {
-		to: {
+		open: {
 			type: [String, Object],
-			default: ''
+			default: undefined
+		},
+		close: {
+			type: [String, Object],
+			default: undefined
 		},
 		tag: {
 			type: String,
 			default: 'a'
+		},
+		custom: {
+			default: undefined
 		}
 	},
-	data() {
-		return {
-			route: null
+	computed: {
+		route() {
+			return this.tabRouterCore.getRoute(this.open || this.close)
+		},
+		isActive() {
+			return this.tabRouterStore.pages.some(
+				page => page.route === this.route
+			)
+		},
+		isVisited() {
+			if (!this.tabRouterStore.currentPage) return false
+			return this.tabRouterStore.currentPage.route === this.route
 		}
 	},
-	created() {
-		// 对接TabRouter核心
-		this.$tabRouter.connect(this, route => {
-			this.route = route
-			console.log('route: ', route)
-		})
+	mounted() {
+		if (
+			(this.open === undefined && this.close === undefined) ||
+			(this.open !== undefined && this.close !== undefined)
+		) {
+			this.errorHandler('open和close不可同时为空或同时出现')
+		}
 	},
 	methods: {
 		link() {
-			this.$tabRouter.open(this.to)
+			this.$tabRouter[this.open ? 'open' : 'close'](
+				this.open || this.close
+			)
 		}
 	},
 	render(createElement) {
@@ -33,17 +55,19 @@ export default {
 			this.tag,
 			{
 				on: {
-					click: this.link
+					click: () => {
+						if (this.$props.custom !== undefined) return
+						this.link()
+					}
 				}
 			},
-			this.$slots.default.length > 1
-				? createElement('span', this.$slots.default)
-				: this.$scopedSlots.default({
-						// route:this.
-				  })
+			this.$scopedSlots.default({
+				route: this.route,
+				navigate: () => this.link(),
+				isActive: this.isActive,
+				isVisited: this.isVisited
+			})
 		)
 	}
 }
 </script>
-
-<style lang="stylus"></style>

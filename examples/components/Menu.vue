@@ -1,11 +1,17 @@
 <template lang="pug">
-	.menu
-		router-link(to='/guide')
-			.item 原生路由
-		template(v-for='menu in menuList')
-			tab-router-link(:to='{ path: menu.path }')
-				.item {{ menu.name }}
-			.item.sub(@click='menuClick(subMenu.path)' v-for='subMenu in menu.children') {{ subMenu.name }}
+.menu
+	template(v-for='menu in menuList')
+		tab-router-link(
+			#default='{ route, navigate, isVisited, isActive }'
+			:open='{ path: menu.path, query: time() }'
+			custom
+			tag='span'
+		)
+			.item(
+				:class='{ visited: isVisited, active: isActive }'
+				@click='navigate'
+			) {{ menu.name }}
+		.item.sub(@click='menuClick(subMenu.path)' v-for='subMenu in menu.children') {{ subMenu.name }}
 </template>
 
 <script>
@@ -24,7 +30,7 @@ export default {
 				},
 				{
 					name: '文档',
-					path: '/doc/routes',
+					path: '/doc',
 					children: [
 						{
 							name: '创建路由',
@@ -46,6 +52,9 @@ export default {
 	methods: {
 		menuClick(path) {
 			this.$tabRouter.open(path)
+		},
+		time() {
+			return Date.now()
 		}
 	}
 }
@@ -55,18 +64,24 @@ export default {
 .menu
 	.item
 		baseTrans()
-		height 40px
+
 		padding-left 40px
-		margin-top: 10px
-		line-height @height
-		font-weight 700
+		height 50px
 		color $color-theme
+		font-weight 700
+		line-height @height
 		cursor pointer
-		&:hover
+		&:hover,
+		&.active
+			background-color rgba($color-theme, 0.2)
 			color darken($color-theme, 10%)
-			background-color rgba($color-theme,0.1)
+		&.visited
+			background-color rgba($color-theme, 1)
+			color #FFFFFF
 		&.sub
-			margin-top: 0
+			margin-top 0
 			padding-left 55px
+			height 40px
 			font-weight 400
+			line-height @height
 </style>

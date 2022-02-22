@@ -14,7 +14,12 @@ module.exports = {
 			.set('@', path.resolve('examples'))
 			.set('~', path.resolve('src'))
 			.set('#', path.resolve('src/utils'))
-		config.module.rule('js').include.add('/packages').end().use('babel').loader('babel-loader')
+		config.module
+			.rule('js')
+			.include.add('/packages')
+			.end()
+			.use('babel')
+			.loader('babel-loader')
 	},
 	pluginOptions: {
 		'style-resources-loader': {
@@ -30,5 +35,6 @@ module.exports = {
 			warning: false,
 			errors: false
 		}
-	}
+	},
+	runtimeCompiler: true
 }

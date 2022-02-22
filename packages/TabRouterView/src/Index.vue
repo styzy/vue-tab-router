@@ -1,26 +1,26 @@
 <template lang="pug">
-	.tab-router-view
-		//- TabContainer
-		keep-alive
-			component(
-				:is='page.route.componentName'
-				:key='page.route.componentName'
-				v-for='page in pages'
-				v-if='page === visitedPage'
-			)
+.tab-router-view
+	component(
+		:is='page.component.name'
+		:key='page.component.name'
+		v-for='page in currentPages'
+		v-show='page === currentPage'
+	)
 </template>
 
 <script>
-import Page from './Page'
+import { core } from '~/mixins'
+import { typeOf } from '#'
 
 export default {
 	name: 'TabRouterView',
+	mixins: [core],
 	props: {
 		default: {
 			type: [String, Object],
 			default: ''
 		},
-		name: {
+		id: {
 			type: String,
 			default: ''
 		}
@@ -28,113 +28,61 @@ export default {
 	data() {
 		return {
 			componentNameSeed: 0,
-			routeStore: null,
-			pages: [],
-			visitedPage: null
+			currentPages: []
 		}
 	},
 	computed: {
-		visitedPageRoute() {
-			return this.visitedPage.route
-		},
-		visitedPageIndex() {
-			return this.pages.findIndex(page => page === this.visitedPage)
+		useCache() {
+			return this.cache !== undefined
 		}
 	},
 	created() {
-		// 对接TabRouter核心
-		this.$tabRouter.connect(this, routeStore => {
-			this.routeStore = routeStore
+		this.$watch('pages', async newPages => {
+			await Promise.all(
+				newPages.map(async newPage => {
+					if (
+						!this.currentPages.find(
+							oldPage => oldPage.id === newPage.id
+						)
+					) {
+						await this.register(newPage)
+					}
+				})
+			)
+
+			this.currentPages = Object.assign([], newPages)
 		})
-		this._registerComponents()
 	},
 	mounted() {
-		// this._defaultOpen()
+		if (this.default) {
+			this.tabRouterCore.open(this.default)
+		}
 	},
 	methods: {
-		// 创建组件唯一名称，用于组件注册
-		_createComponentName() {
-			return `tab-router-component${this.componentNameSeed++}`
+		createComponentName() {
+			return `TabRouterViewComponent${this.componentNameSeed++}`
 		},
 		// 注册组件
-		_registerComponents() {
-			Object.values(this.routeStore.toArray()).forEach(route => {
-				route.componentName = this._createComponentName()
-				this.$options.components[route.componentName] = route.component
-			})
-		},
-		_createPage(...args) {
-			const page = new Page(...args)
-			this.pages.push(page)
-			return page
-		},
-		_focusPage(page) {
-			this.visitedPage = page
-		},
-		_closePage(page, isForce) {
-			if (!page.route.closeEnable && !isForce) {
-				console.warn('当前页面不允许关闭，可以使用 forceClose 强制关闭')
-				return false
-			}
-
-			const nextFocusPage = this._getNearbyPage(page)
-
-			if (nextFocusPage) {
-				this._focusPage(nextFocusPage)
-			}
-
-			this._destroyPage(page)
-
-			return true
-		},
-		_destroyPage(page) {
-			const pageIndex = this.pages.findIndex(_page => _page === page)
-			if (pageIndex < 0) return
-			this.pages.splice(pageIndex, 1)
-		},
-		_getPageByRoute(route) {
-			return this.pages.find(page => page.route === route)
-		},
-		_getNearbyPage(page) {
-			const pageIndex = this.pages.findIndex(_page => _page === page)
-			return this.pages[pageIndex + 1] || this.pages[pageIndex - 1]
-		},
-		open(location, originLocation) {
-			const route = this.routeStore.getByLocation(location)
-
-			if (!route) throw `无法匹配路由，错误的参数:${originLocation}`
-
-			let page = this._getPageByRoute(route)
-
-			if (page) {
-				page.updateLocation(location)
-				this._focusPage(page)
+		async register(page) {
+			const componentName = this.createComponentName()
+			page.component.name = componentName
+			if (typeOf(page.route.component) === 'Function') {
+				page.component.options = (await page.route.component()).default
 			} else {
-				page = this._createPage(route, location)
-				this._focusPage(page)
+				page.component.options = page.route.component
 			}
-		},
-		close(location, isForce, originLocation) {
-			const route = this.routeStore.getByLocation(location)
-
-			if (!route) throw `路由不存在:${originLocation}`
-
-			const page = this._getPageByRoute(route)
-
-			if (!page) {
-				console.warn(`当前页面未打开:${originLocation}`)
-				return true
-			}
-
-			return this._closePage(page, isForce)
-		},
-		closeAll(isForce) {
-			this.pages.forEach(page => {
-				this._closePage(page, isForce)
+			page.component.options.mixins = page.component.options.mixins || []
+			page.component.options.mixins.push({
+				beforeCreate() {
+					page.component.instance = this
+				}
 			})
+			this.$options.components[componentName] = page.component.options
+			return page
 		}
+	},
+	destroyed() {
+		this.tabRouterCore.reset()
 	}
 }
 </script>
-
-<style lang="stylus"></style>
