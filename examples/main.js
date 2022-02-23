@@ -5,7 +5,7 @@ import tabRouter from './tabRouter'
 import store from './store'
 
 import 'github-markdown-css'
-import 'vue-cli-plugin-markdown-loader/atom-one-dark.css'
+import 'highlight.js/styles/atom-one-dark.css'
 import './assets/stylus/index.styl'
 import './assets/stylus/highlight.styl'
 
