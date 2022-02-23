@@ -29,9 +29,9 @@ Vue.use(VueTabRouter)
 
 const routes = [
 	{
-		path: '/install',
-		name: 'Install',
-		title: '安装',
+		path: '/helloworld',
+		name: 'HelloWorld',
+		title: '欢迎',
 		component: () => import('@/views/HelloWorld.vue')
 	}
 ]

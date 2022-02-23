@@ -2,10 +2,14 @@
 .index
 	.header
 		.logo
-			img.logo-img(src='@/assets/images/logo.png')
-			.name TabRouter
-			.version v {{ version }}
-		.title TabRouter · 标签路由
+			img(src='@/assets/images/logo.png')
+		.name TabRouter
+		.version v {{ version }}
+		a(href='https://github.com/styzy/vue-tab-router' target='_blank')
+			.github-link
+				.icon 
+					i.iconfont.github
+				.text GitHub
 	.menu
 		Menu
 	.title-bar
@@ -19,7 +23,8 @@
 			//- template(#contextmenu='{ close, location }')
 			//- div(@click='close') 关闭{{ location.title }}
 	.body
-		TabRouterView(default='/install')
+		.markdown-body
+			TabRouterView(default='/introduce')
 </template>
 
 <script>
@@ -50,6 +55,7 @@ $border-color = #eaecef
 $title-bar-height = 40px
 
 .header
+	baseAcf()
 	baseTrans()
 
 	position fixed
@@ -60,42 +66,55 @@ $title-bar-height = 40px
 	width 100%
 	height $header-height
 	border-bottom 1px solid $border-color
-	background-color raba(255, 255, 255, 0.5)
+	background-color #FFFFFF
 	color $color-theme
 	line-height @height
 	.logo
 		float left
-		width $menu-width
-		font-size 0
-		.logo-img
-			display inline-block
-			margin 0 15px 0 20px
-			width 36px
-			height 36px
-			vertical-align middle
-		.name
-			display inline-block
-			vertical-align middle
-			font-size 28px
-		.version
-			display inline-block
-			margin-top 5px
-			margin-left 25px
-			padding 0 5px
-			height 20px
-			border-radius 3px
-			background-color: $color-theme + #111111
-			color #FFFFFF
-			vertical-align middle
-			font-size 14px
-			line-height @height
-	.title
+		margin: (($header-height - 40px) / 2)
+		width 40px
+		height 40px
+		img
+			baseImg()
+	.name
 		float left
-		width 'calc(100% - %s)' % $menu-width
-		text-align center
-		font-size 24px
-	&:hover
-		background-color #FFFFFF
+		font-size 28px
+	.version
+		float left
+		margin-top 33px
+		margin-left 25px
+		padding 0 5px
+		height 20px
+		border-radius 3px
+		background-color: $color-theme + #111111
+		color #FFFFFF
+		vertical-align middle
+		font-size 14px
+		line-height @height
+	.github-link
+		baseAcf()
+		baseTrans()
+
+		float right
+		padding 0 20px
+		height $header-height
+		color #666666
+		.icon
+			float left
+			margin-top: (($header-height - 30px) / 2)
+			width 30px
+			height 30px
+			text-align center
+			line-height @height
+			i
+				font-size 30px
+		.text
+			float left
+			margin-left 10px
+			font-weight 700
+		&:hover
+			background-color $color-theme
+			color #FFFFFF
 .menu
 	position fixed
 	top $header-height
@@ -111,6 +130,7 @@ $title-bar-height = 40px
 	top $header-height
 	right 0
 	left $menu-width
+	z-index 1
 	height $title-bar-height
 	.title
 		width 500px
@@ -118,6 +138,9 @@ $title-bar-height = 40px
 		color #FFFFFF
 		text-align center
 .body
+	baseScroll()
+
+	overflow-y auto
 	box-sizing border-box
 	padding-top: $header-height + $title-bar-height
 	padding-left $menu-width

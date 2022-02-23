@@ -22,19 +22,19 @@ export default {
 			menuList: [
 				{
 					name: '介绍',
-					path: '/guide'
+					path: '/introduce'
 				},
 				{
-					name: '安装',
+					name: '安装和使用',
 					path: '/install'
 				},
 				{
-					name: '文档',
-					path: '/doc',
+					name: '使用指南',
+					path: '/guide',
 					children: [
 						{
-							name: '创建路由',
-							path: '/doc/routes'
+							name: '创建路由配置',
+							path: '/guide/routes'
 						},
 						{
 							name: '路由导航与跳转',

@@ -52,9 +52,9 @@
 		"style-resources-loader": "^1.4.1",
 		"stylus": "^0.54.7",
 		"stylus-loader": "^3.0.2",
-		"vue-cli-plugin-markdown": "~0.1.2",
+		"vue-cli-plugin-markdown-loader": "~1.0.1",
 		"vue-cli-plugin-pug": "~2.0.0",
 		"vue-cli-plugin-style-resources-loader": "~0.1.5",
-		"vue-template-compiler": "^2.6.11"
+		"vue-template-compiler": "^2.6.14"
 	}
 }

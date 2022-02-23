@@ -5,22 +5,28 @@ Vue.use(VueTabRouter)
 
 const routes = [
 	{
-		path: '/install',
-		name: 'Install',
-		title: '安装',
-		component: () => import('@/views/modules/Install')
+		path: '/introduce',
+		name: 'Introduce',
+		title: '介绍',
+		component: () => import('@/views/modules/Introduce')
 	},
 	{
-		path: '/doc',
-		name: 'Doc',
-		title: '文档',
-		component: () => import('@/views/modules/Doc')
+		path: '/install',
+		name: 'Install',
+		title: '安装和使用',
+		component: () => import('@/views/modules/Install')
 	},
 	{
 		path: '/guide',
 		name: 'Guide',
-		title: '介绍',
-		component: () => import('@/views/modules/Guide')
+		title: '使用指南',
+		component: () => import('@/views/modules/guide/Index')
+	},
+	{
+		path: '/guide/routes',
+		name: 'GuideRoutes',
+		title: '使用指南',
+		component: () => import('@/views/modules/guide/Routes')
 	}
 ]
 
