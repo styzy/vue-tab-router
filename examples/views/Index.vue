@@ -2,10 +2,10 @@
 .index
 	.header
 		.logo
-			img(src='@/assets/images/logo.png')
+			img(src="@/assets/images/logo.png")
 		.name TabRouter
 		.version v {{ version }}
-		a(href='https://github.com/styzy/vue-tab-router' target='_blank')
+		a(href="https://github.com/styzy/vue-tab-router" target="_blank")
 			.github-link
 				.icon 
 					i.iconfont.github
@@ -16,15 +16,14 @@
 		TabRouterTitleBar
 			//- template(#title)
 			//- .title 123
-			//- template(#title='{ location }')
-			//- .title {{ location.title }}
+			//- template(#title='{ route }')
+			//- .title {{ route.title }}
 			//- template(#contextmenu)
 			//- div 123
-			//- template(#contextmenu='{ close, location }')
-			//- div(@click='close') 关闭{{ location.title }}
+			//- template(#contextmenu='{ close, route }')
+			//- div(@click='close') 关闭{{ route.title }}
 	.body
-		.markdown-body
-			TabRouterView(default='/introduce')
+		TabRouterView(:default="{ path: '/introduce', title: '介绍' }")
 </template>
 
 <script>

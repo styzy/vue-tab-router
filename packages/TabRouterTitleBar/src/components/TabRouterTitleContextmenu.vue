@@ -1,20 +1,19 @@
 <template lang="pug">
-.tab-router-title-contextmenu(:style='{ top: `${top}px`, left: `${left}px` }')
-	template(v-if='$scopedSlots.default')
+.tab-router-title-contextmenu(:style="{ top: `${top}px`, left: `${left}px` }")
+	template(v-if="$scopedSlots.default")
 		slot(
-			:close='close'
-			:focus='focus'
-			:isVisited='isVisited'
-			:location='page.location'
-			:reload='reload'
-			:route='page.route'
+			:close="close"
+			:focus="focus"
+			:isVisited="isVisited"
+			:reload="reload"
+			:route="page.route"
 		)
-	template(v-else-if='$slots.default')
+	template(v-else-if="$slots.default")
 		slot
 	template(v-else)
 		.tab-router-title-contextmenu-wrapper
-			.tab-router-title-contextmenu-item(@click='reload') 刷新
-			.tab-router-title-contextmenu-item(@click='close') 关闭
+			.tab-router-title-contextmenu-item(@click="reload") 刷新
+			.tab-router-title-contextmenu-item(@click="close") 关闭
 </template>
 <script>
 import { core } from '~/mixins'
@@ -41,13 +40,13 @@ export default {
 	},
 	methods: {
 		focus() {
-			this.$tabRouter.focus(this.page.location)
+			this.$tabRouter.focus(this.page.route.location)
 		},
 		reload() {
-			this.$tabRouter.reload(this.page.location)
+			this.$tabRouter.reload(this.page.route.location)
 		},
 		close() {
-			this.$tabRouter.close(this.page.location)
+			this.$tabRouter.close(this.page.route.location)
 		}
 	}
 }

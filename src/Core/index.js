@@ -2,19 +2,30 @@ import Vue from 'vue'
 import Route from './Route'
 import Location from './Location'
 import Page from './Page'
-
+import { NAVIGATE_TYPES as navTypes } from './CONSTANTS'
+import { typeOf } from '#'
 class Core {
-	constructor(_routes = []) {
+	constructor(
+		{ routes: _routes, logEnable } = {
+			routes: [],
+			logEnable: process.env.NODE_ENV !== 'production'
+		}
+	) {
 		this.store = Vue.observable({
 			routes: [],
 			pages: [],
-			currentPage: null
+			currentPage: null,
+			focusComplate: null
 		})
+		this.NAVIGATE_TYPES = navTypes
+		this._logEnable = !!logEnable
 		this._pageIdSeed = 0
+		this._beforeEachs = []
+		this._afterEachs = []
 		try {
 			this._initRoutes(_routes)
 		} catch (error) {
-			this.errorHandler(`[init] ${error}`)
+			this.$error(`[init] ${error}`)
 		}
 	}
 	_initRoutes(_routes) {
@@ -22,12 +33,9 @@ class Core {
 			this.store.routes.push(new Route(_route))
 		})
 	}
-	_getRouteByLocation(location) {
-		return this.store.routes.find(
-			route =>
-				route.name === location.name ||
-				route.path === location.path ||
-				route.path === '*'
+	_getRouteByLocation(location, useWildcard) {
+		return this.store.routes.find(route =>
+			route.match(location, useWildcard)
 		)
 	}
 	_getPageByRoute(route) {
@@ -42,53 +50,155 @@ class Core {
 	_createPageId() {
 		return `page-${this._pageIdSeed++}`
 	}
-	_createPage(route, location) {
-		return new Page({ id: this._createPageId(), route, location })
+	_createPage(route) {
+		return new Page({ id: this._createPageId(), route })
 	}
-	_openPage(page) {
+	_addPage(page) {
 		this.store.pages.push(page)
+
+		this._triggerAfterDefender(navTypes.OPEN, page.route)
 	}
-	_focusPage(page) {
+	async _openPage(route, location) {
+		if (!(await this._triggerBeforeDefender(navTypes.OPEN, route))) return
+
+		route.updateLocation(location)
+
+		const page = this._createPage(route)
+
+		this._addPage(page)
+		await this._focusPage(page)
+	}
+	async _focusPage(page) {
+		if (page === this.store.currentPage) return
+
+		if (!(await this._triggerBeforeDefender(navTypes.FOCUS, page.route)))
+			return
+
+		const lastCurrentPage = this.store.currentPage
+
 		this.store.currentPage = page
+
+		this._triggerAfterDefender(
+			navTypes.FOCUS,
+			page.route,
+			lastCurrentPage ? lastCurrentPage.route : null
+		)
 	}
-	_reloadPage(page) {
-		const newPage = this._createPage(page.route, page.location),
+	async _reloadPage(page) {
+		if (!(await this._triggerBeforeDefender(navTypes.RELOAD, page.route)))
+			return
+
+		const newPage = this._createPage(page.route),
 			pageIndex = this.store.pages.findIndex(_page => _page === page)
 		this.store.pages.splice(pageIndex, 1, newPage)
 		if (page === this.store.currentPage) {
 			this.store.currentPage = newPage
 		}
+
+		this._triggerAfterDefender(navTypes.RELOAD, page.route)
 	}
-	_closePage(page) {
+	async _closePage(page) {
+		if (!(await this._triggerBeforeDefender(navTypes.CLOSE, page.route)))
+			return
+
+		let nextFocusPage = null
 		if (page === this.store.currentPage) {
-			this._focusPage(this._getNearbyPageByPage(page))
+			nextFocusPage = this._getNearbyPageByPage(page)
 		}
 
 		this._destroyPage(page)
+
+		this._triggerAfterDefender(navTypes.CLOSE, page.route)
+
+		if (nextFocusPage) {
+			await this._focusPage(nextFocusPage)
+		}
 	}
 	_destroyPage(page) {
 		const pageIndex = this.store.pages.findIndex(_page => _page === page)
 		if (pageIndex < 0) return
 		this.store.pages.splice(pageIndex, 1)
 	}
-	reset() {
-		this.store.pages = []
-		this.store.currentPage = null
+	_addDefender(defender, isBefore) {
+		if (isBefore) {
+			this._beforeEachs.push(defender)
+		} else {
+			this._afterEachs.push(defender)
+		}
 	}
-	errorHandler(error) {
-		console.error(`[TabRouter] ${error}`)
+	_removeDefender(defender, isBefore) {
+		const defenders = isBefore ? this._beforeEachs : this._afterEachs,
+			index = defenders.findIndex(_defender => _defender === defender)
+
+		if (index !== -1) {
+			defenders.splice(index, 1)
+		}
 	}
-	getRoute(location) {
+	async _triggerBeforeDefender(type, targetRoute = null) {
+		const currentRoute = this.store.currentPage
+			? this.store.currentPage.route
+			: null
+
+		const resArray = await Promise.all(
+			this._beforeEachs.map(defender => {
+				return new Promise(resolve => {
+					defender(type, currentRoute, targetRoute, nextParam => {
+						if (nextParam === false) {
+							resolve(false)
+						} else {
+							resolve(true)
+						}
+					})
+				})
+			})
+		)
+		return resArray.every(res => res)
+	}
+	_triggerAfterDefender(
+		type,
+		targetRoute = null,
+		currentRoute = this.store.currentPage
+			? this.store.currentPage.route
+			: null
+	) {
+		this._afterEachs.forEach(defender => {
+			defender(type, currentRoute, targetRoute)
+		})
+	}
+	$error(error) {
+		try {
+			if (!this._logEnable) return
+			console.error(`[TabRouter] ${error}`)
+		} catch (error) {
+			console.error(`[TabRouter] [$error] ${error}`)
+		}
+	}
+	$warn(error) {
+		try {
+			if (!this._logEnable) return
+			console.warn(`[TabRouter] ${error}`)
+		} catch (error) {
+			console.warn(`[TabRouter] [$warn] ${error}`)
+		}
+	}
+	$reset() {
+		try {
+			this.store.pages = []
+			this.store.currentPage = null
+		} catch (error) {
+			this.$error(`[$reset] ${error}`)
+		}
+	}
+	$getRoute(location, useWildcard) {
 		if (!(location instanceof Location)) {
 			location = new Location(location)
 		}
-		return this._getRouteByLocation(location)
+		return this._getRouteByLocation(location, useWildcard)
 	}
-	open(_location = '') {
+	async open(_location = '') {
 		try {
-			const location = new Location(_location)
-
-			const route = this._getRouteByLocation(location)
+			const location = new Location(_location),
+				route = this._getRouteByLocation(location, true)
 
 			if (!route)
 				throw `无法匹配路由，错误的参数:${JSON.stringify(_location)}`
@@ -96,22 +206,19 @@ class Core {
 			let page = this._getPageByRoute(route)
 
 			if (page) {
-				page.location.update(location)
+				route.updateLocation(location)
+				await this._focusPage(page)
 			} else {
-				page = this._createPage(route, location)
-				this._openPage(page)
+				await this._openPage(route, location)
 			}
-
-			this._focusPage(page)
 		} catch (error) {
-			this.errorHandler(`[open] ${error}`)
+			this.$error(`[open] ${error}`)
 		}
 	}
-	focus(_location = '') {
+	async focus(_location = '') {
 		try {
-			const location = new Location(_location)
-
-			const route = this._getRouteByLocation(location)
+			const location = new Location(_location),
+				route = this._getRouteByLocation(location, true)
 
 			if (!route)
 				throw `无法匹配路由，错误的参数:${JSON.stringify(_location)}`
@@ -120,16 +227,15 @@ class Core {
 
 			if (!page) throw `页面未渲染:${JSON.stringify(_location)}`
 
-			this._focusPage(page)
+			await this._focusPage(page)
 		} catch (error) {
-			this.errorHandler(`[focus] ${error}`)
+			this.$error(`[focus] ${error}`)
 		}
 	}
-	reload(_location = '') {
+	async reload(_location = '') {
 		try {
-			const location = new Location(_location)
-
-			const route = this._getRouteByLocation(location)
+			const location = new Location(_location),
+				route = this._getRouteByLocation(location)
 
 			if (!route)
 				throw `无法匹配路由，错误的参数:${JSON.stringify(_location)}`
@@ -138,16 +244,15 @@ class Core {
 
 			if (!page) throw `页面未渲染:${JSON.stringify(_location)}`
 
-			this._reloadPage(page)
+			await this._reloadPage(page)
 		} catch (error) {
-			this.errorHandler(`[reload] ${error}`)
+			this.$error(`[reload] ${error}`)
 		}
 	}
-	close(_location = '') {
+	async close(_location = '') {
 		try {
-			const location = new Location(_location)
-
-			const route = this._getRouteByLocation(location)
+			const location = new Location(_location),
+				route = this._getRouteByLocation(location)
 
 			if (!route)
 				throw `无法匹配路由，错误的参数:${JSON.stringify(_location)}`
@@ -156,19 +261,41 @@ class Core {
 
 			if (!page) throw `页面未渲染:${JSON.stringify(_location)}`
 
-			this._closePage(page)
+			await this._closePage(page)
 		} catch (error) {
-			this.errorHandler(`[close] ${error}`)
+			this.$error(`[close] ${error}`)
 		}
 	}
-	closeAll() {
+	async closeAll() {
 		try {
-			const pages = Object([], this.store.pages).reverse()
-			pages.forEach(page => {
-				this._closePage(page)
-			})
+			const pages = Object.assign([], this.store.pages).reverse()
+
+			for (let index = 0; index < pages.length; index++) {
+				const page = pages[index]
+				await this._closePage(page)
+			}
 		} catch (error) {
-			this.errorHandler(`[closeAll] ${error}`)
+			this.$error(`[closeAll] ${error}`)
+		}
+	}
+	beforeEach(defender) {
+		try {
+			if (typeOf(defender) !== 'Function') throw `参数必须为Function类型`
+
+			this._addDefender(defender, true)
+			return () => this._removeDefender(defender, true)
+		} catch (error) {
+			this.$error(`[beforeEach] ${error}`)
+		}
+	}
+	afterEach(defender) {
+		try {
+			if (typeOf(defender) !== 'Function') throw `参数必须为Function类型`
+
+			this._addDefender(defender, false)
+			return () => this._removeDefender(defender, false)
+		} catch (error) {
+			this.$error(`[afterEach] ${error}`)
 		}
 	}
 }

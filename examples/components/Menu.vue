@@ -1,17 +1,39 @@
 <template lang="pug">
 .menu
-	template(v-for='menu in menuList')
+	router-link(to="/test" v-if="!isPrd")
+		.item 测试页面 Only In Dev
+	template(v-for="menu in menuList")
 		tab-router-link(
-			#default='{ route, navigate, isVisited, isActive }'
-			:open='{ path: menu.path, query: time() }'
+			#default="{ route, navigate, isVisited, isActive }"
+			:open="menu.path"
 			custom
-			tag='span'
 		)
 			.item(
-				:class='{ visited: isVisited, active: isActive }'
-				@click='navigate'
-			) {{ menu.name }}
-		.item.sub(@click='menuClick(subMenu.path)' v-for='subMenu in menu.children') {{ subMenu.name }}
+				:class="{ visited: isVisited, active: isActive }"
+				@click="navigate"
+			) {{ route.title }}
+		template(v-for="secondMenu in menu.children")
+			tab-router-link(
+				#default="{ route, navigate, isVisited, isActive }"
+				:key="secondMenu.path"
+				:open="secondMenu.path"
+				custom
+			)
+				.item.second(
+					:class="{ visited: isVisited, active: isActive }"
+					@click="navigate"
+				) {{ route.title }}
+			template(v-for="thirdMenu in secondMenu.children")
+				tab-router-link(
+					#default="{ route, navigate, isVisited, isActive }"
+					:key="thirdMenu.path"
+					:open="thirdMenu.path"
+					custom
+				)
+					.item.third(
+						:class="{ visited: isVisited, active: isActive }"
+						@click="navigate"
+					) {{ route.title }}
 </template>
 
 <script>
@@ -21,67 +43,122 @@ export default {
 		return {
 			menuList: [
 				{
-					name: '介绍',
 					path: '/introduce'
 				},
 				{
-					name: '安装和使用',
 					path: '/install'
 				},
 				{
-					name: '使用指南',
 					path: '/guide',
 					children: [
 						{
-							name: '创建路由配置',
-							path: '/guide/routes'
+							path: '/guide/config'
 						},
 						{
-							name: '路由导航与跳转',
-							path: '/doc/router'
+							path: '/guide/view'
 						},
 						{
-							name: '参数配置',
-							path: '/doc/params'
+							path: '/guide/titleView'
+						},
+						{
+							path: '/guide/navigate'
+						},
+						{
+							path: '/guide/navigateFn'
+						},
+						{
+							path: '/guide/routeMatch'
+						},
+						{
+							path: '/guide/defender'
+						}
+					]
+				},
+				{
+					path: '/component',
+					children: [
+						{
+							path: '/component/TabRouterLink'
+						},
+						{
+							path: '/component/TabRouterView'
+						},
+						{
+							path: '/component/TabRouterTitleBar'
+						}
+					]
+				},
+				{
+					path: '/api',
+					children: [
+						{
+							path: '/api/router',
+							children: [
+								{
+									path: '/api/router/routes'
+								}
+							]
+						},
+						{
+							path: '/api/route'
+						},
+						{
+							path: '/api/location'
+						},
+						{
+							path: '/api/NAVIGATE_TYPES'
 						}
 					]
 				}
 			]
-		}
-	},
-	methods: {
-		menuClick(path) {
-			this.$tabRouter.open(path)
-		},
-		time() {
-			return Date.now()
 		}
 	}
 }
 </script>
 
 <style lang="stylus" scoped>
+$padding-left = 40px
+
 .menu
+	baseScroll()
+
 	.item
 		baseTrans()
 
-		padding-left 40px
+		position relative
+		padding-left $padding-left
 		height 50px
 		color $color-theme
 		font-weight 700
+		font-size 20px
 		line-height @height
 		cursor pointer
-		&:hover,
 		&.active
-			background-color rgba($color-theme, 0.2)
-			color darken($color-theme, 10%)
-		&.visited
+			background-color rgba($color-theme, 0.1)
+		&.visited:after
+			position absolute
+			top 0
+			left 0
+			z-index 1
+			display block
+			width 5px
+			height 100%
 			background-color rgba($color-theme, 1)
-			color #FFFFFF
-		&.sub
+			content ''
+		&:hover
+			background-color lighten(rgba($color-theme, 0.1), 50%)
+		&.second
 			margin-top 0
-			padding-left 55px
+			padding-left: $padding-left + 10px
 			height 40px
 			font-weight 400
+			font-size 16px
+			line-height @height
+		&.third
+			margin-top 0
+			padding-left: $padding-left + 25px
+			height 40px
+			font-weight 400
+			font-size 16px
 			line-height @height
 </style>

@@ -23,31 +23,36 @@ export default {
 	},
 	computed: {
 		route() {
-			return this.tabRouterCore.getRoute(this.open || this.close)
+			return this.$trCore.$getRoute(this.close || this.open || '')
 		},
 		isActive() {
-			return this.tabRouterStore.pages.some(
-				page => page.route === this.route
-			)
+			return this.pages.some(page => page.route === this.route)
 		},
 		isVisited() {
-			if (!this.tabRouterStore.currentPage) return false
-			return this.tabRouterStore.currentPage.route === this.route
+			if (!this.currentPage) return false
+			return this.currentPage.route === this.route
 		}
 	},
 	mounted() {
-		if (
-			(this.open === undefined && this.close === undefined) ||
-			(this.open !== undefined && this.close !== undefined)
-		) {
-			this.errorHandler('open和close不可同时为空或同时出现')
+		if (this.open === undefined && this.close === undefined) {
+			this.$warn('open和close不建议同时为空，因为这没有意义')
+		}
+		if (this.open !== undefined && this.close !== undefined) {
+			this.$warn(
+				'open和close不建议同时存在，尽管当close存在时，open将被忽略，但这会导致代码逻辑混乱'
+			)
 		}
 	},
 	methods: {
 		link() {
-			this.$tabRouter[this.open ? 'open' : 'close'](
-				this.open || this.close
-			)
+			if (this.close) {
+				this.$tabRouter.close(this.close)
+				return
+			}
+			if (this.open) {
+				this.$tabRouter.open(this.open)
+				return
+			}
 		}
 	},
 	render(createElement) {

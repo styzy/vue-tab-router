@@ -6,10 +6,13 @@ import store from './store'
 
 import 'github-markdown-css'
 import 'highlight.js/styles/atom-one-dark.css'
+import 'vue-cli-plugin-markdown-loader/atom-one-dark.fixed.css'
 import './assets/stylus/index.styl'
-import './assets/stylus/highlight.styl'
+import './assets/stylus/markdown.styl'
 
 Vue.config.productionTip = false
+
+Vue.prototype.isPrd = process.env.NODE_ENV === 'production'
 
 new Vue({
 	tabRouter,

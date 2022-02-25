@@ -5,24 +5,27 @@ export default {
 			store: null
 		}
 	},
-	created() {
-		this.tabRouterCore = this.$tabRouter.core
-		this.tabRouterStore = this.$tabRouter.core.store
+	beforeCreate() {
+		this.$trCore = this.$tabRouter.core
+		this.$trStore = this.$tabRouter.core.store
 	},
 	computed: {
 		routes() {
-			return this.tabRouterStore.routes
+			return this.$trStore.routes
 		},
 		pages() {
-			return this.tabRouterStore.pages
+			return this.$trStore.pages
 		},
 		currentPage() {
-			return this.tabRouterStore.currentPage
+			return this.$trStore.currentPage
 		}
 	},
 	methods: {
-		errorHandler(error) {
-			this.tabRouterCore.errorHandler(`[${this.$options.name}] ${error}`)
+		$error(error) {
+			this.$trCore.$error(`[${this.$options.name}] ${error}`)
+		},
+		$warn(warn) {
+			this.$trCore.$warn(`[${this.$options.name}] ${warn}`)
 		}
 	}
 }

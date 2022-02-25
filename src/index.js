@@ -27,6 +27,12 @@ class TabRouter {
 	closeAll(...args) {
 		return this.core.closeAll(...args)
 	}
+	beforeEach(...args) {
+		return this.core.beforeEach(...args)
+	}
+	afterEach(...args) {
+		return this.core.afterEach(...args)
+	}
 }
 
 TabRouter.version = version

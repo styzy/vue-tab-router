@@ -1,10 +1,10 @@
 # vue-tab-router
 
->一款支持 Vue.js 2.x版本的标签页路由框架
+> 一款支持 Vue.js 2.x 版本的标签页路由框架
 
 `vue-tab-router` 是一款适用于 `vue2` 的标签页路由插件，通过简单地安装和配置，开发者可以获得类似于 `vue-router` 路由的开发体验。
 
-`vue-tab-router` 具有部署方便、可自由扩展、可针对需求二次开发的优点，内置的api满足大部分项目需求。
+`vue-tab-router` 具有部署方便、可自由扩展、可针对需求二次开发的优点，内置的API满足大部分的开发需求。
 
 ## 安装
 
@@ -18,30 +18,32 @@ npm install -S @styzy/vue-tab-router
 
 ### 引入
 
-在你的vue项目的 `src` 目录中，创建 `tabRouter.js` ，类似 `router.js`
+在你的 vue 项目的 `src` 目录中，创建 `tabRouter.js` ，类似 `router.js`
 
 ```es6
 //tabRouter.js
 import Vue from 'vue'
-import VueTabRouter from '~'
+import VueTabRouter from '@styzy/vue-tab-router'
 
 Vue.use(VueTabRouter)
 
 const routes = [
 	{
+		title: '欢迎',
 		path: '/helloworld',
 		name: 'HelloWorld',
-		title: '欢迎',
 		component: () => import('@/views/HelloWorld.vue')
 	}
 ]
 
-const tabRouter = new VueTabRouter(routes)
+const tabRouter = new VueTabRouter({
+	routes
+})
 
 export default tabRouter
 ```
 
-在vue实例化 `main.js` 中使用它
+在 vue 实例化 `main.js` 中使用它
 
 ```es6
 import Vue from 'vue'
@@ -64,7 +66,7 @@ new Vue({
 
 ## 文档
 
-所有的使用教程和API可以通过 [官方文档](http://vue-tab-router.styzy.cn) 进行查看
+所有的使用教程和 API 可以通过 [官方文档](http://vue-tab-router.styzy.cn) 进行查看
 
 ## 示例
 

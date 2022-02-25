@@ -1,29 +1,28 @@
 <template lang="pug">
 .tab-router-title-custom(
-	@contextmenu.prevent='contextmenuHandler'
-	v-if='$scopedSlots.default'
+	@contextmenu.prevent="contextmenuHandler"
+	v-if="$scopedSlots.default"
 )
 	slot(
-		:close='close'
-		:focus='focus'
-		:isVisited='isVisited'
-		:location='page.location'
-		:reload='reload'
-		:route='page.route'
+		:close="close"
+		:focus="focus"
+		:isVisited="isVisited"
+		:reload="reload"
+		:route="page.route"
 	)
 .tab-router-title-custom(
-	@contextmenu.prevent='contextmenuHandler'
-	v-else-if='$slots.default'
+	@contextmenu.prevent="contextmenuHandler"
+	v-else-if="$slots.default"
 )
 	slot
 .tab-router-title(
-	:class='{ "tab-router-title-focus": isVisited }'
-	@click='focus()'
-	@contextmenu.prevent='contextmenuHandler'
+	:class="{ 'tab-router-title-focus': isVisited }"
+	@click="focus()"
+	@contextmenu.prevent="contextmenuHandler"
 	v-else
 )
-	.tab-router-title-text {{ page.location.title }}
-	.tab-router-title-close(@click.stop='close()')
+	.tab-router-title-text {{ page.route.title }}
+	.tab-router-title-close(@click.stop="close()")
 		i.tab-router-iconfont.close
 </template>
 
@@ -45,13 +44,13 @@ export default {
 	},
 	methods: {
 		focus() {
-			this.$tabRouter.focus(this.page.location)
+			this.$tabRouter.focus(this.page.route.location)
 		},
 		reload() {
-			this.$tabRouter.reload(this.page.location)
+			this.$tabRouter.reload(this.page.route.location)
 		},
 		close() {
-			this.$tabRouter.close(this.page.location)
+			this.$tabRouter.close(this.page.route.location)
 		},
 		contextmenuHandler(event) {
 			this.$emit('contextmenu', event, this.page)

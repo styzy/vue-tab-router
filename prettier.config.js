@@ -36,7 +36,7 @@ module.exports = {
 	// <bool> - 默认值 true，表示在每个语句的末尾添加分号
 	pugSemi: false,
 	// <bool> - 默认值 false，true则表示使用单引号而不是双引号
-	pugSingleQuote: true,
+	pugSingleQuote: false,
 	// <always|as-needed|none> - 默认值 always，是否使用逗号隔开属性
 	pugAttributeSeparator: 'none',
 	// <keep-all|keep-leading|trim-all> - 默认值 keep-all，是否删除注释前的空格

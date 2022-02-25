@@ -1,10 +1,11 @@
 <template lang="pug">
 .tab-router-view
 	component(
-		:is='page.component.name'
-		:key='page.component.name'
-		v-for='page in currentPages'
-		v-show='page === currentPage'
+		:is="page.component.name"
+		:key="page.component.name"
+		v-bind="page.route.props ? page.route.query : {}"
+		v-for="page in currentPages"
+		v-show="page === currentPage"
 	)
 </template>
 
@@ -55,7 +56,7 @@ export default {
 	},
 	mounted() {
 		if (this.default) {
-			this.tabRouterCore.open(this.default)
+			this.$trCore.open(this.default)
 		}
 	},
 	methods: {
@@ -74,6 +75,7 @@ export default {
 			page.component.options.mixins = page.component.options.mixins || []
 			page.component.options.mixins.push({
 				beforeCreate() {
+					this.$tabRoute = page.route
 					page.component.instance = this
 				}
 			})
@@ -82,7 +84,7 @@ export default {
 		}
 	},
 	destroyed() {
-		this.tabRouterCore.reset()
+		this.$trCore.$reset()
 	}
 }
 </script>
