@@ -36,5 +36,10 @@ module.exports = {
 			errors: false
 		}
 	},
-	runtimeCompiler: true
+	runtimeCompiler: true,
+	configureWebpack: {
+		output: {
+			libraryExport: 'default'
+		}
+	}
 }

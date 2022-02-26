@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueTabRouter from '~'
+// import VueTabRouter from '/lib/vue-tab-router.common.js'
 
 Vue.use(VueTabRouter)
 

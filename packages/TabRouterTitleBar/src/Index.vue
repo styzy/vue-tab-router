@@ -29,15 +29,16 @@
 </template>
 
 <script>
+import TabRouterTitle from './components/TabRouterTitle'
+import TabRouterTitleContextmenu from './components/TabRouterTitleContextmenu'
 import { core } from '~/mixins'
 import { px2number } from '#'
 
 export default {
 	name: 'TabRouterTitleBar',
 	components: {
-		TabRouterTitle: () => import('./components/TabRouterTitle'),
-		TabRouterTitleContextmenu: () =>
-			import('./components/TabRouterTitleContextmenu')
+		TabRouterTitle: TabRouterTitle,
+		TabRouterTitleContextmenu: TabRouterTitleContextmenu
 	},
 	mixins: [core],
 	props: {

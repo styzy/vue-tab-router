@@ -23,7 +23,7 @@ export default {
 	},
 	computed: {
 		route() {
-			return this.$trCore.$getRoute(this.close || this.open || '')
+			return this.$trCore.$getRoute(this.close || this.open || '') || {}
 		},
 		isActive() {
 			return this.pages.some(page => page.route === this.route)
