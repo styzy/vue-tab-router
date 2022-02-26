@@ -112,9 +112,6 @@ export default {
 							path: '/api/TabRoute'
 						},
 						{
-							path: '/api/Route'
-						},
-						{
 							path: '/api/Location'
 						},
 						{
