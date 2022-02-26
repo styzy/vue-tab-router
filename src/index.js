@@ -4,7 +4,7 @@ import TabRouterView from '../packages/TabRouterView'
 import TabRouterTitleBar from '../packages/TabRouterTitleBar'
 import './assets/stylus/iconfont.styl'
 
-const version = '0.1.1'
+const version = '0.1.2'
 
 const components = [TabRouterLink, TabRouterView, TabRouterTitleBar]
 
