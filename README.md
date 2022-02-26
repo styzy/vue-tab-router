@@ -14,6 +14,12 @@
 npm install -S @styzy/vue-tab-router
 ```
 
+### yarn
+
+```bash
+yarn add @styzy/vue-tab-router
+```
+
 ## 使用
 
 ### 引入
