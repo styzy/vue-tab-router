@@ -40,6 +40,12 @@ export default {
 			import('./components/TabRouterTitleContextmenu')
 	},
 	mixins: [core],
+	props: {
+		contextmenuDisbale: {
+			type: Boolean,
+			default: false
+		}
+	},
 	data() {
 		return {
 			scrollOffset: 0,
@@ -291,11 +297,11 @@ export default {
 <style lang="stylus">
 .tab-router-title-bar
 	overflow hidden
-	.tab-router-title-bar-scroll-wrapper
-		baseTrans(0.15s)
+.tab-router-title-bar-scroll-wrapper
+	baseTrans(0.15s)
 
-		overflow hidden
-		margin-left 0
-		background #F4F5F6
-		white-space nowrap
+	overflow hidden
+	margin-left 0
+	background #F4F5F6
+	white-space nowrap
 </style>

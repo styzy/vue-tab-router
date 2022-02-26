@@ -64,6 +64,9 @@ export default {
 							path: '/guide/navigate'
 						},
 						{
+							path: '/guide/query'
+						},
+						{
 							path: '/guide/navigateFn'
 						},
 						{
@@ -92,18 +95,27 @@ export default {
 					path: '/api',
 					children: [
 						{
-							path: '/api/router',
+							path: '/api/TabRouter',
 							children: [
 								{
-									path: '/api/router/routes'
+									path: '/api/TabRouter/RouteConfig'
 								}
 							]
 						},
 						{
-							path: '/api/route'
+							path: '/api/TabRouter/props'
 						},
 						{
-							path: '/api/location'
+							path: '/api/TabRouter/methods'
+						},
+						{
+							path: '/api/TabRoute'
+						},
+						{
+							path: '/api/Route'
+						},
+						{
+							path: '/api/Location'
 						},
 						{
 							path: '/api/NAVIGATE_TYPES'

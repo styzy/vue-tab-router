@@ -137,9 +137,6 @@ $title-bar-height = 40px
 		color #FFFFFF
 		text-align center
 .body
-	baseScroll()
-
-	overflow-y auto
 	box-sizing border-box
 	padding-top: $header-height + $title-bar-height
 	padding-left $menu-width

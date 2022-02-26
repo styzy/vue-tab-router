@@ -3,7 +3,7 @@ class Route {
 		title = '',
 		name = '',
 		path = '',
-		component,
+		component = null,
 		props = false,
 		meta = {}
 	} = {}) {

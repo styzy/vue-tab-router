@@ -68,7 +68,7 @@ const tabRouter = new VueTabRouter({
 
 <br>
 
-> 所有参数详细信息可以参考<TabRouterLink open="/api/TabRouter/routes" >API TabRouter 构建选项 Routes</TabRouterLink>
+> 所有参数详细信息可以参考<TabRouterLink open="/api/TabRouter/RouteConfig" >API TabRouter 构建选项 RouteConfig</TabRouterLink>
 
 ## 其他参数
 

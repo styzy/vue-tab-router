@@ -1,12 +1,14 @@
 <template lang="pug">
 .tab-router-view
-	component(
-		:is="page.component.name"
-		:key="page.component.name"
-		v-bind="page.route.props ? page.route.query : {}"
+	.tab-router-view-wrapper(
 		v-for="page in currentPages"
 		v-show="page === currentPage"
 	)
+		component(
+			:is="page.component.name"
+			:key="page.component.name"
+			v-bind="page.route.props ? page.route.query : {}"
+		)
 </template>
 
 <script>
@@ -88,3 +90,10 @@ export default {
 	}
 }
 </script>
+<style lang="stylus">
+.tab-router-view
+	height 100%
+.tab-router-view-wrapper
+	overflow-y auto
+	height 100%
+</style>

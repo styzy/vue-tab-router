@@ -40,7 +40,7 @@
 
 `#title` 作用域插槽接收5个参数：
 
-* `route: Route`：当前路由信息，具体细节可以查看<TabRouterLink open="/api/route">API Route</TabRouterLink>
+* `route: TabRoute`：当前路由信息，具体细节可以查看<TabRouterLink open="/api/TabRoute">API TabRoute</TabRouterLink>
 
 * `focus: Function`：导航方法，触发聚焦效果
 
@@ -83,3 +83,5 @@
 ```
 
 作用域插槽 `#contextmenu` 内提供的参数和自定义标题的作用域插槽 `#title` 是同样的，依据触发 `contextmenu` 事件的菜单，动态注入对应的数据。
+
+> 更多细节请查看<TabRouterLink open="/component/TabRouterTitleBar">内置组件 TabRouterTitleBar</TabRouterLink>

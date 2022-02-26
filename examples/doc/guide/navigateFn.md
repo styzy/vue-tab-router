@@ -44,7 +44,7 @@ tabRouter.open({
 为了防止匹配逻辑混乱，你应该避免使用同时使用 `name` 属性和 `path` 属性
 :::
 
-`query` 属性会将参数传递给路由渲染的子组件内部，通过 `this.$tabRoute.query` 可以访问。
+`query` 属性会将参数传递给路由渲染的子组件内部，通过 `this.$tabRoute.query` 可以访问。如果你在路由配置中使用了 `props` 属性并设置为 `true` ，则同时可以在渲染组件的 `props` 中获取到。
 
 ## tabRouter.close(location)
 

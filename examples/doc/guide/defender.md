@@ -48,9 +48,9 @@ tabRouter.beforeEach((type, current, target, next) => {
 
 * `type: String`: 当前触发导航的类型，请参考<TabRouterLink open="/api/NAVIGATE_TYPES">API 导航类型常量</TabRouterLink>。
 
-* `current: Route`: 触发导航时，当前聚焦的路由对象，如果当前没有渲染的路由，则是`null`。
+* `current: TabRoute`: 触发导航时，当前聚焦的路由对象，如果当前没有渲染的路由，则是`null`。
 
-* `target: Route`: 针对不用的导航类型`type`，它的值有不同含义：
+* `target: TabRoute`: 针对不用的导航类型`type`，它的值有不同含义：
   
   + `NAVIGATE_TYPES.OPEN`：即将渲染的路由对象。
   

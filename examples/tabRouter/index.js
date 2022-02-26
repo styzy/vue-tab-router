@@ -35,7 +35,7 @@ const giudeRoutes = [
 		component: () => import('@/doc/guide/view.md')
 	},
 	{
-		title: '标签视图',
+		title: '标题视图',
 		path: '/guide/titleView',
 		component: () => import('@/doc/guide/titleView.md')
 	},
@@ -43,6 +43,11 @@ const giudeRoutes = [
 		title: '路由导航',
 		path: '/guide/navigate',
 		component: () => import('@/doc/guide/navigate.md')
+	},
+	{
+		title: '参数传递',
+		path: '/guide/query',
+		component: () => import('@/doc/guide/query.md')
 	},
 	{
 		title: '编程式的导航',
@@ -58,39 +63,6 @@ const giudeRoutes = [
 		title: '导航守卫',
 		path: '/guide/defender',
 		component: () => import('@/doc/guide/defender.md')
-	}
-]
-
-const apiRoutes = [
-	{
-		title: 'API',
-		path: '/api',
-		component: () => import('@/doc/api.md')
-	},
-	{
-		title: 'TabRouter 构建选项',
-		path: '/api/router',
-		component: () => import('@/doc/api/router.md')
-	},
-	{
-		title: 'routes',
-		path: '/api/router/routes',
-		component: () => import('@/doc/api/router.routes.md')
-	},
-	{
-		title: 'Route',
-		path: '/api/route',
-		component: () => import('@/doc/api/route.md')
-	},
-	{
-		title: 'Location',
-		path: '/api/location',
-		component: () => import('@/doc/api/location.md')
-	},
-	{
-		title: '导航类型常量',
-		path: '/api/NAVIGATE_TYPES',
-		component: () => import('@/doc/api/NAVIGATE_TYPES.md')
 	}
 ]
 
@@ -117,6 +89,49 @@ const componentRoutes = [
 	}
 ]
 
+const apiRoutes = [
+	{
+		title: 'API',
+		path: '/api',
+		component: () => import('@/doc/api.md')
+	},
+	{
+		title: 'TabRouter 构建选项',
+		path: '/api/TabRouter',
+		component: () => import('@/doc/api/TabRouter.md')
+	},
+	{
+		title: 'RouteConfig',
+		path: '/api/TabRouter/RouteConfig',
+		component: () => import('@/doc/api/TabRouter.RouteConfig.md')
+	},
+	{
+		title: 'TabRouter 实例属性',
+		path: '/api/TabRouter/props',
+		component: () => import('@/doc/api/TabRouter.props.md')
+	},
+	{
+		title: 'TabRouter 实例方法',
+		path: '/api/TabRouter/methods',
+		component: () => import('@/doc/api/TabRouter.methods.md')
+	},
+	{
+		title: 'TabRoute 实例属性',
+		path: '/api/TabRoute',
+		component: () => import('@/doc/api/TabRoute.md')
+	},
+	{
+		title: 'Location',
+		path: '/api/Location',
+		component: () => import('@/doc/api/Location.md')
+	},
+	{
+		title: '导航类型常量',
+		path: '/api/NAVIGATE_TYPES',
+		component: () => import('@/doc/api/NAVIGATE_TYPES.md')
+	}
+]
+
 const testRoute = [
 	{
 		title: 'test',
@@ -128,16 +143,15 @@ const testRoute = [
 
 let routes = mainRoutes
 	.concat(giudeRoutes)
-	.concat(apiRoutes)
 	.concat(componentRoutes)
+	.concat(apiRoutes)
 
 if (!isPrd) {
 	routes = testRoute.concat(routes)
 }
 
 const tabRouter = new VueTabRouter({
-	routes,
-	logEnable: !isPrd
+	routes
 })
 
 const removeBeforeEach = tabRouter.beforeEach((type, current, target, next) => {
