@@ -64,6 +64,7 @@ $title-height = 40px
 
 .tab-router-title-custom
 	display inline-block !important
+	vertical-align middle
 .tab-router-title
 	baseTrans()
 
@@ -73,6 +74,7 @@ $title-height = 40px
 	height $title-height
 	background-color rgba($color-theme, 0.1)
 	color darken($color-theme, 10%)
+	vertical-align middle
 	font-size 0
 	cursor pointer
 	user-select none
