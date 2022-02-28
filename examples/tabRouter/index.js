@@ -158,7 +158,7 @@ const tabRouter = new VueTabRouter({
 const removeBeforeEach = tabRouter.beforeEach((type, current, target, next) => {
 	console.log('beforeEach:')
 	console.log(
-		`${type}: ${current ? current.path : ''}  -->  ${
+		`${type.toString()}: ${current ? current.path : ''}  -->  ${
 			target ? target.path : ''
 		}`
 	)
@@ -170,7 +170,7 @@ removeBeforeEach()
 const removeAfterEach = tabRouter.afterEach((type, current, target) => {
 	console.log('afterEach:')
 	console.log(
-		`${type}: ${current ? current.path : ''}  -->  ${
+		`${type.toString()}: ${current ? current.path : ''}  -->  ${
 			target ? target.path : ''
 		}`
 	)

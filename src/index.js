@@ -2,7 +2,7 @@ import Core from './Core'
 import components from '../packages'
 import './assets/stylus/iconfont.styl'
 
-const version = '0.1.7'
+const version = '0.1.8'
 class TabRouter {
 	constructor(...args) {
 		this.core = new Core(...args)
@@ -27,6 +27,9 @@ class TabRouter {
 	}
 	afterEach(...args) {
 		return this.core.afterEach(...args)
+	}
+	get NAVIGATE_TYPES() {
+		return this.core.NAVIGATE_TYPES
 	}
 }
 
