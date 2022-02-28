@@ -20,13 +20,6 @@ module.exports = {
 			.end()
 			.use('babel')
 			.loader('babel-loader')
-		// config.module
-		// 	.rule('fonts')
-		// 	.use('url-loader')
-		// 	.tap(options => {
-		// 		options.limit = 30 * 1024
-		// 		return options
-		// 	})
 	},
 	pluginOptions: {
 		'style-resources-loader': {
