@@ -1,13 +1,8 @@
 import Core from './Core'
-import TabRouterLink from '../packages/TabRouterLink'
-import TabRouterView from '../packages/TabRouterView'
-import TabRouterTitleBar from '../packages/TabRouterTitleBar'
+import components from '../packages'
 import './assets/stylus/iconfont.styl'
 
-const version = '0.1.4'
-
-const components = [TabRouterLink, TabRouterView, TabRouterTitleBar]
-
+const version = '0.1.5'
 class TabRouter {
 	constructor(...args) {
 		this.core = new Core(...args)
@@ -38,7 +33,7 @@ class TabRouter {
 TabRouter.version = version
 
 TabRouter.install = function (Vue) {
-	components.forEach(component => {
+	Object.values(components).forEach(component => {
 		Vue.component(component.name, component)
 	})
 
