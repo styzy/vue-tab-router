@@ -1,6 +1,7 @@
 {
 	"compilerOptions": {
 		"target": "ESNext",
+		"module": "CommonJS",
 		"baseUrl": "./",
 		"paths": {
 			"@/*": ["/examples/*"],
