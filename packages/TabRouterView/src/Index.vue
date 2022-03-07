@@ -13,7 +13,7 @@
 
 <script>
 import { core } from '~/mixins'
-import { typeOf } from '#'
+import { typeOf, deepClone } from '#'
 
 export default {
 	name: 'TabRouterView',
@@ -74,7 +74,11 @@ export default {
 			} else {
 				page.component.options = page.route.component
 			}
+
+			page.component.options = deepClone(page.component.options)
+
 			page.component.options.mixins = page.component.options.mixins || []
+
 			page.component.options.mixins.push({
 				beforeCreate() {
 					this.$tabRoute = page.route

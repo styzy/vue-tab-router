@@ -139,6 +139,12 @@ const testRoute = [
 		path: '/test',
 		props: true,
 		component: () => import('@/views/test/Module')
+	},
+	{
+		title: 'test1',
+		path: '/test1',
+		props: true,
+		component: () => import('@/views/test/Module')
 	}
 ]
 

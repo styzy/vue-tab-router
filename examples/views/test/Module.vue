@@ -1,5 +1,7 @@
 <template lang="pug">
 .test 
+	button(@click="$tabRouter.open('/test1')") 打开另一个标签页
+	br
 	input(v-model="time")
 	h3 route
 	p(v-for="routeAttr in routeAttrList")
