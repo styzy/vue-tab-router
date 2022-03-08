@@ -5,12 +5,10 @@ import Page from './Page'
 import { NAVIGATE_TYPES as navTypes } from './CONSTANTS'
 import { typeOf } from '#'
 class Core {
-	constructor(
-		{ routes: _routes, logEnable } = {
-			routes: [],
-			logEnable: process.env.NODE_ENV !== 'production'
-		}
-	) {
+	constructor({
+		routes: _routes = [],
+		logEnable = process.env.NODE_ENV !== 'production'
+	} = {}) {
 		this.store = Vue.observable({
 			routes: [],
 			pages: [],

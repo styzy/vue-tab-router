@@ -1,5 +1,5 @@
 class Page {
-	constructor({ id, route }) {
+	constructor({ id, route } = {}) {
 		this.id = id
 		this.route = route
 		this.component = {

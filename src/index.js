@@ -2,7 +2,7 @@ import Core from './Core'
 import components from '../packages'
 import './assets/stylus/iconfont.styl'
 
-const version = '0.2.0'
+const version = '0.2.1'
 class TabRouter {
 	constructor(...args) {
 		this.core = new Core(...args)
