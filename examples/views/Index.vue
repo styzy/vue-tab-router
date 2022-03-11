@@ -14,14 +14,6 @@
 		Menu
 	.title-bar
 		TabRouterTitleBar
-			//- template(#title)
-			//- .title 123
-			//- template(#title='{ route }')
-			//- .title {{ route.title }}
-			//- template(#contextmenu)
-			//- div 123
-			//- template(#contextmenu='{ close, route }')
-			//- div(@click='close') 关闭{{ route.title }}
 	.body
 		TabRouterView(:default="{ path: '/introduce', title: '介绍' }")
 </template>
@@ -131,11 +123,6 @@ $title-bar-height = 40px
 	left $menu-width
 	z-index 1
 	height $title-bar-height
-	.title
-		width 500px
-		background-color $color-theme
-		color #FFFFFF
-		text-align center
 .body
 	box-sizing border-box
 	padding-top: $header-height + $title-bar-height

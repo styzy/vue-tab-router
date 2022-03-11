@@ -66,12 +66,14 @@ export default {
 					}
 				}
 			},
-			this.$scopedSlots.default({
-				route: this.route,
-				navigate: () => this.link(),
-				isActive: this.isActive,
-				isVisited: this.isVisited
-			})
+			this.$scopedSlots.default
+				? this.$scopedSlots.default({
+						route: this.route,
+						navigate: () => this.link(),
+						isActive: this.isActive,
+						isVisited: this.isVisited
+				  })
+				: ''
 		)
 	}
 }

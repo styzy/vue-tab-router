@@ -69,7 +69,7 @@ export default {
 }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 .test
 	padding 40px
 </style>

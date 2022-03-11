@@ -28,6 +28,43 @@ module.exports = {
 				path.resolve(__dirname, './examples/assets/stylus/color.styl'),
 				path.resolve(__dirname, './examples/assets/stylus/global.styl')
 			]
+		},
+		'markdown-loader': {
+			// 渲染的组件的根节点标签
+			wrapperTag: 'div',
+			// 渲染的组件的根节点class
+			wrapperClassName: 'markdown-body',
+			// 是否使用缓存，默认为true
+			useCache: false,
+			// 块设置
+			container: {
+				// demo块
+				demo: {
+					// 块名字
+					spoiler: 'demo',
+					// 渲染的标签名
+					tag: 'Demo'
+				},
+				// 自定义的块
+				customBlocks: [
+					{
+						spoiler: 'tip',
+						tag: 'Tip'
+					},
+					{
+						spoiler: 'success',
+						tag: 'Tip'
+					},
+					{
+						spoiler: 'warning',
+						tag: 'Tip'
+					},
+					{
+						spoiler: 'danger',
+						tag: 'Tip'
+					}
+				]
+			}
 		}
 	},
 	devServer: {

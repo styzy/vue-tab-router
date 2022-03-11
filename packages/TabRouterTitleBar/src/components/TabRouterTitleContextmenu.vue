@@ -8,8 +8,6 @@
 			:reload="reload"
 			:route="page.route"
 		)
-	template(v-else-if="$slots.default")
-		slot
 	template(v-else)
 		.tab-router-title-contextmenu-wrapper
 			.tab-router-title-contextmenu-item(@click="reload") 刷新

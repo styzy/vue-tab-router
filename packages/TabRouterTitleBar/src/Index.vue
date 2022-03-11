@@ -298,11 +298,13 @@ export default {
 <style lang="stylus">
 .tab-router-title-bar
 	overflow hidden
+	height 100%
 	background #F4F5F6
 .tab-router-title-bar-scroll-wrapper
 	baseTrans(0.15s)
 
 	overflow hidden
 	margin-left 0
+	height 100%
 	white-space nowrap
 </style>

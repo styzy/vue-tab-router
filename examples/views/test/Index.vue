@@ -1,6 +1,7 @@
 <template lang="pug">
 .test
 	.menu
+		TabRouterLink
 		TabRouterLink(:open="path") 无slot
 		TabRouterLink(:open="path")
 			.item open
@@ -45,8 +46,16 @@
 		.item(@click="close") js 关闭
 		.item(@click="closeAll") js 全部关闭
 		.item(@click="openWithQuery") js 打开 携带query
-	.title
+	.title-bar
 		TabRouterTitleBar
+			//- template(#title)
+			//- .title 123
+			//- template(#title="{ route, focus }")
+			//- .title(@click="focus") {{ route.title }}
+			//- template(#contextmenu)
+			//- div 123
+			//- template(#contextmenu="{ close, route }")
+			//- div(@click="close") 关闭{{ route.title }}
 	.body
 		TabRouterView(:default="path")
 </template>
@@ -134,15 +143,22 @@ $title-height = 40px
 			content ''
 		&:hover
 			background-color lighten(rgba($color-theme, 0.1), 50%)
-.title
+.title-bar
 	position fixed
 	left $menu-width
+	z-index 2
 	width 'calc(100vw - %s)' % $menu-width
 	height $title-height
+	.title
+		width 500px
+		height 50px
+		background-color $color-theme
+		color #FFFFFF
+		text-align center
+		line-height @height
 .body
 	baseScroll()
 
-	overflow-y auto
 	box-sizing border-box
 	padding-top $title-height
 	padding-left $menu-width

@@ -10,11 +10,6 @@
 		:reload="reload"
 		:route="page.route"
 	)
-.tab-router-title-custom(
-	@contextmenu.prevent="contextmenuHandler"
-	v-else-if="$slots.default"
-)
-	slot
 .tab-router-title(
 	:class="{ 'tab-router-title-focus': isVisited }"
 	@click="focus()"
