@@ -2,20 +2,28 @@ import Vue from 'vue'
 import Route from './Route'
 import Location from './Location'
 import Page from './Page'
-import { NAVIGATE_TYPES as navTypes } from './CONSTANTS'
+import EventListener from './EventListener'
+import { NAVIGATE_TYPES as NT } from './CONSTANTS'
 import { typeOf } from '#'
 class Core {
+	get store() {
+		return this._store
+	}
+	get NAVIGATE_TYPES() {
+		return this._NAVIGATE_TYPES
+	}
 	constructor({
 		routes: _routes = [],
 		logEnable = process.env.NODE_ENV !== 'production'
 	} = {}) {
-		this.store = Vue.observable({
+		this._store = Vue.observable({
 			routes: [],
 			pages: [],
 			currentPage: null,
-			focusComplate: null
+			focusComplate: null,
+			eventListeners: []
 		})
-		this.NAVIGATE_TYPES = navTypes
+		this._NAVIGATE_TYPES = NT
 		this._logEnable = !!logEnable
 		this._pageIdSeed = 0
 		this._beforeEachs = []
@@ -54,12 +62,12 @@ class Core {
 	_addPage(page) {
 		this.store.pages.push(page)
 
-		this._triggerAfterDefender(navTypes.OPEN, page.route)
+		this._triggerAfterDefender(NT.OPEN, page.route)
 	}
 	async _openPage(route, location) {
-		if (!(await this._triggerBeforeDefender(navTypes.OPEN, route))) return
+		if (!(await this._triggerBeforeDefender(NT.OPEN, route))) return
 
-		route.updateLocation(location)
+		route.$location = location
 
 		const page = this._createPage(route)
 
@@ -69,44 +77,46 @@ class Core {
 	async _focusPage(page) {
 		if (page === this.store.currentPage) return
 
-		if (!(await this._triggerBeforeDefender(navTypes.FOCUS, page.route)))
-			return
+		if (!(await this._triggerBeforeDefender(NT.FOCUS, page.route))) return
 
 		const lastCurrentPage = this.store.currentPage
 
 		this.store.currentPage = page
 
 		this._triggerAfterDefender(
-			navTypes.FOCUS,
+			NT.FOCUS,
 			page.route,
 			lastCurrentPage ? lastCurrentPage.route : null
 		)
 	}
 	async _reloadPage(page) {
-		if (!(await this._triggerBeforeDefender(navTypes.RELOAD, page.route)))
-			return
+		if (!(await this._triggerBeforeDefender(NT.RELOAD, page.route))) return
 
 		const newPage = this._createPage(page.route),
 			pageIndex = this.store.pages.findIndex(_page => _page === page)
+
+		this._removeEventListenersByRoute(page.route)
+
 		this.store.pages.splice(pageIndex, 1, newPage)
 		if (page === this.store.currentPage) {
 			this.store.currentPage = newPage
 		}
 
-		this._triggerAfterDefender(navTypes.RELOAD, page.route)
+		this._triggerAfterDefender(NT.RELOAD, page.route)
 	}
 	async _closePage(page) {
-		if (!(await this._triggerBeforeDefender(navTypes.CLOSE, page.route)))
-			return
+		if (!(await this._triggerBeforeDefender(NT.CLOSE, page.route))) return
 
 		let nextFocusPage = null
 		if (page === this.store.currentPage) {
 			nextFocusPage = this._getNearbyPageByPage(page)
 		}
 
+		this._removeEventListenersByRoute(page.route)
+
 		this._destroyPage(page)
 
-		this._triggerAfterDefender(navTypes.CLOSE, page.route)
+		this._triggerAfterDefender(NT.CLOSE, page.route)
 
 		if (nextFocusPage) {
 			await this._focusPage(nextFocusPage)
@@ -163,6 +173,46 @@ class Core {
 			defender(type, currentRoute, targetRoute)
 		})
 	}
+	_addEventListener(route, event, listener, once) {
+		const eventListener = new EventListener({
+			route,
+			event,
+			listener,
+			once
+		})
+
+		this.store.eventListeners.push(eventListener)
+
+		return () => {
+			this._removeEventListener(eventListener)
+		}
+	}
+	_removeEventListener(eventListener) {
+		const index = this.store.eventListeners.findIndex(
+			_eventListener => _eventListener === eventListener
+		)
+
+		this.store.eventListeners.splice(index, 1)
+	}
+	_removeEventListenersByRoute(route) {
+		this.store.eventListeners = this.store.eventListeners.filter(
+			_eventListener => _eventListener.route !== route
+		)
+		console.log('this.store.eventListeners: ', this.store.eventListeners)
+	}
+	_triggerEventListener(route, event, payload) {
+		const eventListeners = this.store.eventListeners.filter(
+			_eventListener =>
+				_eventListener.route === route && _eventListener.event === event
+		)
+		eventListeners.forEach(eventListener => {
+			const { listener, once } = eventListener
+			listener && listener(payload)
+			if (once) {
+				this._removeEventListener(eventListener)
+			}
+		})
+	}
 	$error(error) {
 		try {
 			if (!this._logEnable) return
@@ -204,7 +254,7 @@ class Core {
 			let page = this._getPageByRoute(route)
 
 			if (page) {
-				route.updateLocation(location)
+				route.$location = location
 				await this._focusPage(page)
 			} else {
 				await this._openPage(route, location)
@@ -294,6 +344,41 @@ class Core {
 			return () => this._removeDefender(defender, false)
 		} catch (error) {
 			this.$error(`[afterEach] ${error}`)
+		}
+	}
+	on(_location, event, listener, once) {
+		try {
+			const location = new Location(_location),
+				route = this._getRouteByLocation(location, true)
+
+			if (!route)
+				throw `无法匹配路由，错误的参数:${JSON.stringify(_location)}`
+
+			const page = this._getPageByRoute(route)
+
+			if (!page) throw `页面未渲染:${JSON.stringify(_location)}`
+
+			return this._addEventListener(route, event, listener, once)
+		} catch (error) {
+			this.$error(`[on] ${error}`)
+		}
+	}
+	emit(_location, event, payload) {
+		try {
+			const location = new Location(_location),
+				route = this._getRouteByLocation(location, true)
+
+			if (!route)
+				throw `无法匹配路由，错误的参数:${JSON.stringify(_location)}`
+
+			const page = this._getPageByRoute(route)
+
+			if (!page)
+				this.$warn(`[emit] 页面未渲染:${JSON.stringify(_location)}`)
+
+			this._triggerEventListener(route, event, payload)
+		} catch (error) {
+			this.$error(`[emit] ${error}`)
 		}
 	}
 }

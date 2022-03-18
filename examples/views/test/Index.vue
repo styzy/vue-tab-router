@@ -46,6 +46,8 @@
 		.item(@click="close") js 关闭
 		.item(@click="closeAll") js 全部关闭
 		.item(@click="openWithQuery") js 打开 携带query
+		.item(@click="on") 监听事件
+		.item(@click="emit") 触发事件
 	.title-bar
 		TabRouterTitleBar
 			//- template(#title)
@@ -102,6 +104,27 @@ export default {
 					testProp: Date.now().toString()
 				}
 			})
+		},
+		emit() {
+			this.$tabRouter.emit(this.path, 'fromParent', 123)
+		},
+		on() {
+			this.$tabRouter.on(
+				this.path,
+				'fromChild',
+				payload => {
+					alert(`一次性 fromChild${payload}`)
+				},
+				true
+			)
+			const removeEventListener = this.$tabRouter.on(
+				this.path,
+				'fromChild',
+				() => {
+					alert(`removeEventListener`)
+					removeEventListener()
+				}
+			)
 		}
 	}
 }

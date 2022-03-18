@@ -31,3 +31,14 @@
 * 定义：注册全局后置导航钩子。
   
 * 返回值：用于移除当前注册的钩子的函数。
+
+## `on(location: Location, event: String, listener: Function, once: Boolean)` : `()=> removeEventListener()`
+
+* 定义：添加页面监听事件
+  
+* 返回值：用于移除当前添加的页面监听事件。
+
+## `emit(location: Location, event: String, payload: Any)`
+
+* 定义：触发页面监听的事件
+  

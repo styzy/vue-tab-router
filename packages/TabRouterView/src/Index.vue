@@ -7,7 +7,7 @@
 		component(
 			:is="page.component.name"
 			:key="page.component.name"
-			v-bind="page.route.props ? page.route.query : {}"
+			v-bind="page.route.$props ? page.route.query : {}"
 		)
 </template>
 
@@ -69,10 +69,10 @@ export default {
 		async register(page) {
 			const componentName = this.createComponentName()
 			page.component.name = componentName
-			if (typeOf(page.route.component) === 'Function') {
-				page.component.options = (await page.route.component()).default
+			if (typeOf(page.route.$component) === 'Function') {
+				page.component.options = (await page.route.$component()).default
 			} else {
-				page.component.options = page.route.component
+				page.component.options = page.route.$component
 			}
 
 			page.component.options = deepClone(page.component.options)

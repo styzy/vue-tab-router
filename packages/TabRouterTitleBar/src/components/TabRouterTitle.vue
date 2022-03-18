@@ -39,13 +39,13 @@ export default {
 	},
 	methods: {
 		focus() {
-			this.$tabRouter.focus(this.page.route.location)
+			this.$tabRouter.focus(this.page.route.$location)
 		},
 		reload() {
-			this.$tabRouter.reload(this.page.route.location)
+			this.$tabRouter.reload(this.page.route.$location)
 		},
 		close() {
-			this.$tabRouter.close(this.page.route.location)
+			this.$tabRouter.close(this.page.route.$location)
 		},
 		contextmenuHandler(event) {
 			this.$emit('contextmenu', event, this.page)

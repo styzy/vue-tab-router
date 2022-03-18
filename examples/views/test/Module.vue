@@ -1,5 +1,7 @@
 <template lang="pug">
 .test 
+	button(@click="emit") 触发事件
+	br
 	button(@click="$tabRouter.open('/test1')") 打开另一个标签页
 	br
 	input(v-model="time")
@@ -53,6 +55,7 @@ export default {
 	},
 	mounted() {
 		console.log('mounted')
+		this.on()
 	},
 	beforeUpdate() {
 		console.log('beforeUpdate')
@@ -65,6 +68,16 @@ export default {
 	},
 	destroyed() {
 		console.log('destroyed')
+	},
+	methods: {
+		on() {
+			this.$tabRouter.on('/test', 'fromParent', payload => {
+				alert(`fromParent:${payload}`)
+			})
+		},
+		emit() {
+			this.$tabRouter.emit('/test', 'fromChild', 456)
+		}
 	}
 }
 </script>

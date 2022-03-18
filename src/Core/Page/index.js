@@ -1,8 +1,17 @@
 class Page {
+	get id() {
+		return this._id
+	}
+	get route() {
+		return this._route
+	}
+	get component() {
+		return this._component
+	}
 	constructor({ id, route } = {}) {
-		this.id = id
-		this.route = route
-		this.component = {
+		this._id = id
+		this._route = route
+		this._component = {
 			name: '',
 			options: null,
 			instance: null

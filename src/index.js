@@ -2,34 +2,43 @@ import Core from './Core'
 import components from '../packages'
 import './assets/stylus/iconfont.styl'
 
-const version = '0.2.2'
+const version = '0.3.0'
 class TabRouter {
-	constructor(...args) {
-		this.core = new Core(...args)
-	}
-	open(...args) {
-		return this.core.open(...args)
-	}
-	focus(...args) {
-		return this.core.focus(...args)
-	}
-	reload(...args) {
-		return this.core.reload(...args)
-	}
-	close(...args) {
-		return this.core.close(...args)
-	}
-	closeAll(...args) {
-		return this.core.closeAll(...args)
-	}
-	beforeEach(...args) {
-		return this.core.beforeEach(...args)
-	}
-	afterEach(...args) {
-		return this.core.afterEach(...args)
+	get core() {
+		return this._core
 	}
 	get NAVIGATE_TYPES() {
-		return this.core.NAVIGATE_TYPES
+		return this._core.NAVIGATE_TYPES
+	}
+	constructor(...args) {
+		this._core = new Core(...args)
+	}
+	open(...args) {
+		return this._core.open(...args)
+	}
+	focus(...args) {
+		return this._core.focus(...args)
+	}
+	reload(...args) {
+		return this._core.reload(...args)
+	}
+	close(...args) {
+		return this._core.close(...args)
+	}
+	closeAll(...args) {
+		return this._core.closeAll(...args)
+	}
+	beforeEach(...args) {
+		return this._core.beforeEach(...args)
+	}
+	afterEach(...args) {
+		return this._core.afterEach(...args)
+	}
+	on(...args) {
+		return this._core.on(...args)
+	}
+	emit(...args) {
+		return this._core.emit(...args)
 	}
 }
 

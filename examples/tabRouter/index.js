@@ -56,6 +56,14 @@ const giudeRoutes = [
 		component: () => import('@/doc/guide/navigateFn.md')
 	},
 	{
+		title: '事件监听和触发',
+		path: '/guide/eventListener',
+		component: () => import('@/doc/guide/eventListener.md'),
+		meta: {
+			new: true
+		}
+	},
+	{
 		title: '路由匹配规则',
 		path: '/guide/routeMatch',
 		component: () => import('@/doc/guide/routeMatch.md')
@@ -114,7 +122,10 @@ const apiRoutes = [
 	{
 		title: 'TabRouter 实例方法',
 		path: '/api/TabRouter/methods',
-		component: () => import('@/doc/api/TabRouter.methods.md')
+		component: () => import('@/doc/api/TabRouter.methods.md'),
+		meta: {
+			update: true
+		}
 	},
 	{
 		title: 'TabRoute 实例属性',

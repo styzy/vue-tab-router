@@ -1,6 +1,18 @@
 import { typeOf } from '#'
 
 class Location {
+	get name() {
+		return this._name
+	}
+	get path() {
+		return this._path
+	}
+	get query() {
+		return this._query
+	}
+	get title() {
+		return this._title
+	}
 	constructor(options = '') {
 		if (typeOf(options) === 'String') {
 			options = {
@@ -14,10 +26,10 @@ class Location {
 
 		if (query && typeOf(query) !== 'Object') throw `query必须为Object类型`
 
-		this.name = name
-		this.path = path
-		this.query = query
-		this.title = title
+		this._name = name
+		this._path = path
+		this._query = query
+		this._title = title
 	}
 }
 

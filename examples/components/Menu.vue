@@ -9,7 +9,7 @@
 			custom
 		)
 			.item(
-				:class="{ visited: isVisited, active: isActive }"
+				:class="{ visited: isVisited, active: isActive, new: isNew(route), update: isUpdate(route), remove: isRemove(route) }"
 				@click="navigate"
 			) {{ route.title }}
 		template(v-for="secondMenu in menu.children")
@@ -20,7 +20,7 @@
 				custom
 			)
 				.item.second(
-					:class="{ visited: isVisited, active: isActive }"
+					:class="{ visited: isVisited, active: isActive, new: isNew(route), update: isUpdate(route), remove: isRemove(route) }"
 					@click="navigate"
 				) {{ route.title }}
 			template(v-for="thirdMenu in secondMenu.children")
@@ -31,7 +31,7 @@
 					custom
 				)
 					.item.third(
-						:class="{ visited: isVisited, active: isActive }"
+						:class="{ visited: isVisited, active: isActive, new: isNew(route), update: isUpdate(route), remove: isRemove(route) }"
 						@click="navigate"
 					) {{ route.title }}
 </template>
@@ -68,6 +68,9 @@ export default {
 						},
 						{
 							path: '/guide/navigateFn'
+						},
+						{
+							path: '/guide/eventListener'
 						},
 						{
 							path: '/guide/routeMatch'
@@ -121,6 +124,17 @@ export default {
 				}
 			]
 		}
+	},
+	methods: {
+		isNew(route) {
+			return route.meta ? !!route.meta.new : false
+		},
+		isUpdate(route) {
+			return route.meta ? !!route.meta.update : false
+		},
+		isRemove(route) {
+			return route.meta ? !!route.meta.remove : false
+		}
 	}
 }
 </script>
@@ -144,7 +158,7 @@ $padding-left = 40px
 		cursor pointer
 		&.active
 			background-color rgba($color-theme, 0.1)
-		&.visited:after
+		&.visited:before
 			position absolute
 			top 0
 			left 0
@@ -170,4 +184,23 @@ $padding-left = 40px
 			font-weight 400
 			font-size 16px
 			line-height @height
+		&.new:after,
+		&.update:after,
+		&.remove:after
+			display inline-block
+			margin-left 10px
+			padding 0 5px 2px
+			border-radius 5px
+			color #FFFFFF
+			font-size 14px
+			line-height 20px
+		&.new:after
+			background-color $color-success
+			content 'new'
+		&.update:after
+			background-color $color-theme
+			content 'update'
+		&.remove:after
+			background-color $color-error
+			content 'remove'
 </style>
