@@ -32,13 +32,16 @@
   
 * 返回值：用于移除当前注册的钩子的函数。
 
-## `on(location: Location, event: String, listener: Function, once: Boolean)` : `()=> removeEventListener()`
+## `$on(location: Location, event: String, listener: Function, once: Boolean)` : `()=> removeEventListener()`
 
-* 定义：添加页面监听事件
+* 定义：监听路由视图事件
   
 * 返回值：用于移除当前添加的页面监听事件。
 
-## `emit(location: Location, event: String, payload: Any)`
+## `$once(location: Location, event: String, listener: Function)` : `()=> removeEventListener()`
 
-* 定义：触发页面监听的事件
+* 定义：一次性监听路由视图事件
+  
+* 返回值：用于移除当前添加的页面监听事件。
+
   

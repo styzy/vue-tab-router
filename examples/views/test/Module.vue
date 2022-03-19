@@ -71,12 +71,13 @@ export default {
 	},
 	methods: {
 		on() {
-			this.$tabRouter.on('/test', 'fromParent', payload => {
-				alert(`fromParent:${payload}`)
+			this.$tabRouter.$on('/test', 'toTest1', payload => {
+				alert(`toTest1:${payload}`)
 			})
 		},
 		emit() {
-			this.$tabRouter.emit('/test', 'fromChild', 456)
+			this.$emit('toParent', 123, 456)
+			this.$emit('toTest1', 666)
 		}
 	}
 }

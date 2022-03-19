@@ -2,7 +2,7 @@ import Core from './Core'
 import components from '../packages'
 import './assets/stylus/iconfont.styl'
 
-const version = '0.3.0'
+const version = '0.4.0'
 class TabRouter {
 	get core() {
 		return this._core
@@ -34,11 +34,8 @@ class TabRouter {
 	afterEach(...args) {
 		return this._core.afterEach(...args)
 	}
-	on(...args) {
+	$on(...args) {
 		return this._core.on(...args)
-	}
-	emit(...args) {
-		return this._core.emit(...args)
 	}
 }
 

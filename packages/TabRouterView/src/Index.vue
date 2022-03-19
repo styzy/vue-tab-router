@@ -81,8 +81,13 @@ export default {
 
 			page.component.options.mixins.push({
 				beforeCreate() {
-					this.$tabRoute = page.route
-					page.component.instance = this
+					page.insBeforeCreate(this)
+				},
+				mounted() {
+					page.insMounted()
+				},
+				destroyed() {
+					page.insDestroyed()
 				}
 			})
 			this.$options.components[componentName] = page.component.options

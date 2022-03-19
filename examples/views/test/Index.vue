@@ -47,7 +47,6 @@
 		.item(@click="closeAll") js 全部关闭
 		.item(@click="openWithQuery") js 打开 携带query
 		.item(@click="on") 监听事件
-		.item(@click="emit") 触发事件
 	.title-bar
 		TabRouterTitleBar
 			//- template(#title)
@@ -73,6 +72,9 @@ export default {
 			pathIndex: 0
 		}
 	},
+	mounted() {
+		this.on()
+	},
 	methods: {
 		dynamicOpen() {
 			this.pathIndex++
@@ -84,14 +86,17 @@ export default {
 			await this.$tabRouter.open(this.path)
 			console.log('open')
 		},
-		focus() {
-			this.$tabRouter.focus(this.path)
+		async focus() {
+			await this.$tabRouter.focus(this.path)
+			console.log('focus')
 		},
-		reload() {
-			this.$tabRouter.reload(this.path)
+		async reload() {
+			await this.$tabRouter.reload(this.path)
+			console.log('reload')
 		},
-		close() {
-			this.$tabRouter.close(this.path)
+		async close() {
+			await this.$tabRouter.close(this.path)
+			console.log('close')
 		},
 		async closeAll() {
 			await this.$tabRouter.closeAll()
@@ -105,21 +110,18 @@ export default {
 				}
 			})
 		},
-		emit() {
-			this.$tabRouter.emit(this.path, 'fromParent', 123)
-		},
 		on() {
-			this.$tabRouter.on(
+			this.$tabRouter.$on(
 				this.path,
-				'fromChild',
-				payload => {
-					alert(`一次性 fromChild${payload}`)
+				'toParent',
+				(payload1, payload2) => {
+					alert(`一次性 toParent:${payload1},${payload2}`)
 				},
 				true
 			)
-			const removeEventListener = this.$tabRouter.on(
+			const removeEventListener = this.$tabRouter.$on(
 				this.path,
-				'fromChild',
+				'toParent',
 				() => {
 					alert(`removeEventListener`)
 					removeEventListener()

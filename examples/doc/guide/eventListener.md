@@ -2,16 +2,21 @@
 
 `VueTabRouter` 内置了事件的监听器和触发器，用于不同路由视图间进行事件的分发和处理。
 
-## 事件监听 tabRouter.on(location, event, listener, once)
+## 添加事件监听 tabRouter.$on(location, event, listener, once)
+
+:::tip
+事件的监听可以在任何能够访问到 `TabRouter实例` 的地方进行。
+:::
 
 ```javascript
-this.$tabRouter.on('/user', 'buy', (payload) => {
+this.$tabRouter.$on('/user', 'buy', (payload) => {
     console.log(payload)
 })
 
 // 一次性监听事件
-this.$tabRouter.on({ name: 'User' }, 'buy', (payload) => {
-    console.log(payload)
+this.$tabRouter.$on({ name: 'User' }, 'buy', (payload1, payload2) => {
+    console.log(payload1)
+    console.log(payload2)
 }, true)
 ```
 
@@ -19,39 +24,58 @@ this.$tabRouter.on({ name: 'User' }, 'buy', (payload) => {
 
 `event` 是监听的事件名，它是一个 `String` 类型的变量，并且是完全自定义的。
 
-`listener` 是事件触发时调用的函数，它接收一个触发时自定义的参数 `payload` 。
+`listener : ([...args])=>{}` 是事件触发时调用的函数，它接收所有事件触发时传递的参数（不限制个数）。
 
 `once` 表示该事件监听是否为一次性，即第一次触发后自动销毁，默认为 `false` 。
 
 :::warning
-当你尝试监听一个未渲染视图的事件时，将抛出一个异常，这是为了防止不必要的事件监听造成的性能损耗，因此你应该尽量保证当需要监听的路由视图已经渲染之后，再进行监听。
+当你尝试对一个未渲染视图进行监听事件时，将抛出一个异常，这是因为所有对事件的监听全部挂载并映射到了路由视图的 `Vue` 实例上，因此在实例未被渲染之前，你无法对其监听事件。
 :::
 
-## 事件触发 tabRouter.emit(location, event, payload)
+## 一次性事件监听 tabRouter.$once(location, event, listener)
 
-任何组件内，都可以触发监听的事件。
+实际上 `$once()` 方法内部调用的也是 `$on()` 方法，它本质上只是一个语法糖。
 
 ```javascript
-this.$tabRouter.emit('/user', 'bug', 123)
+this.$tabRouter.$once('/user', 'buy', (payload) => {
+    console.log(payload)
+})
+
+// 作用相同
+
+this.$tabRouter.$on('/user', 'buy', (payload) => {
+    console.log(payload)
+}, true)
 ```
 
-你可以自定义一个任意类型的参数 `payload` ，它将被触发事件的函数作为第一个参数接收。
+## 事件触发 $emit(event, [...args])
 
-:::tip
-当路由视图被关闭时，对其所有的事件监听将被移除，而当你尝试使用 `emit` 触发一个处于未渲染状态路由视图的事件时，控制台将打印警告。
+只有在路由视图组件内，才可以进行事件的触发。 `VueTabRouter` 框架内部代理了路由视图组件的事件触发功能，即 `$emit()` 方法，因此你可以像触发原生事件一样触发路由视图的事件。
 
-在生产环境中，这是无感知的。
+```javascript
+this.$emit('buy', 123, 456, 789)
+```
+
+`event` 是需要触发的事件名称，其他的参数将全部传递给事件触发函数。
+
+:::warning
+请不要在路由视图组件内部对自身进行事件监听，这会导致无意义的性能消耗。
 :::
 
 ## 移除监听事件
 
-`on()` 方法的返回值是一个函数，用于移除当前添加的事件监听。你可以用变量存储它，在需要的时候移除监听事件。
+添加监听事件方法的返回值是一个函数，用于移除当前添加的事件监听。你可以用变量存储它，在需要的时候移除监听事件。
 
 ```javascript
-const removeEventListener = this.$tabRouter.on('/user', 'buy', (payload) => {
+// 监听事件
+const removeEventListener = this.$tabRouter.$on('/user', 'buy', (payload) => {
     console.log(payload)
-
-    // 移除监听
-    removeEventListener()
 })
+
+// 移除监听
+removeEventListener()
 ```
+
+:::danger
+所有的监听事件，并不会自动销毁，因此你需要自行控制监听事件的移除时机。比较推荐的方法，是在添加监听的组件的 `destroyed` 生命周期函数内进行事件监听的移除。
+:::
