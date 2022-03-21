@@ -70,6 +70,8 @@ class Core {
 
 		const page = this._createPage(route)
 
+		await this._focusPage(page)
+
 		await new Promise(resolve => {
 			page.insMounted = () => {
 				resolve()
@@ -77,8 +79,6 @@ class Core {
 
 			this._addPage(page)
 		})
-
-		await this._focusPage(page)
 	}
 	async _focusPage(page) {
 		if (page === this.store.currentPage) return
