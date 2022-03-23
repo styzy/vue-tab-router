@@ -10,12 +10,14 @@
 				.icon 
 					i.iconfont.github
 				.text GitHub
+		TabRouterLink(open="/dev/log")
+			.version-log 更新日志
 	.menu
 		Menu
 	.title-bar
 		TabRouterTitleBar
 	.body
-		TabRouterView(:default="{ path: '/introduce', title: '介绍' }")
+		TabRouterView(:default="{ path: '/dev/log' }")
 </template>
 
 <script>
@@ -34,7 +36,7 @@ export default {
 		}
 	},
 	mounted() {
-		// this.$tabRouter.open('/install')
+		this.$tabRouter.open('/introduce')
 	}
 }
 </script>
@@ -81,6 +83,12 @@ $title-bar-height = 40px
 		color #FFFFFF
 		vertical-align middle
 		font-size 14px
+		line-height @height
+	.version-log
+		float right
+		margin (($header-height - 20px) / 2) 20px
+		height 20px
+		font-size 16px
 		line-height @height
 	.github-link
 		baseAcf()

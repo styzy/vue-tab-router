@@ -144,6 +144,18 @@ const apiRoutes = [
 	}
 ]
 
+const devRoute = [
+	{
+		title: '更新日志',
+		path: '/dev/log',
+		props: true,
+		component: () => import('@/doc/dev/log.md'),
+		meta: {
+			closeDisabled: true
+		}
+	}
+]
+
 const testRoute = [
 	{
 		title: 'test',
@@ -163,6 +175,7 @@ let routes = mainRoutes
 	.concat(giudeRoutes)
 	.concat(componentRoutes)
 	.concat(apiRoutes)
+	.concat(devRoute)
 
 if (!isPrd) {
 	routes = testRoute.concat(routes)
@@ -172,28 +185,37 @@ const tabRouter = new VueTabRouter({
 	routes
 })
 
-const removeBeforeEach = tabRouter.beforeEach((type, current, target, next) => {
-	console.log('beforeEach:')
-	console.log(
-		`${type.toString()}: ${current ? current.path : ''}  -->  ${
-			target ? target.path : ''
-		}`
-	)
-	next()
+const beforeOpen = (current, target, next) => {
+		next()
+	},
+	beforeClose = (current, target, next) => {
+		if (target.meta && target.meta.closeDisabled) {
+			next(false)
+		} else {
+			next()
+		}
+	},
+	beforeFocus = (current, target, next) => {
+		next()
+	},
+	beforeReload = (current, target, next) => {
+		next()
+	}
+
+tabRouter.beforeEach((type, ...args) => {
+	const TYPES = tabRouter.NAVIGATE_TYPES
+
+	switch (type) {
+		case TYPES.OPEN:
+			return beforeOpen(...args)
+		case TYPES.FOCUS:
+			return beforeFocus(...args)
+		case TYPES.RELOAD:
+			return beforeReload(...args)
+		case TYPES.CLOSE:
+			return beforeClose(...args)
+	}
 })
-
-removeBeforeEach()
-
-const removeAfterEach = tabRouter.afterEach((type, current, target) => {
-	console.log('afterEach:')
-	console.log(
-		`${type.toString()}: ${current ? current.path : ''}  -->  ${
-			target ? target.path : ''
-		}`
-	)
-})
-
-removeAfterEach()
 
 export { routes }
 
