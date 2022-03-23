@@ -55,6 +55,7 @@ export default {
 	},
 	mounted() {
 		console.log('mounted')
+		console.log(window.getComputedStyle(this.$el)['width'])
 		this.on()
 	},
 	beforeUpdate() {

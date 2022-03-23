@@ -110,12 +110,12 @@ class Core {
 				resolve()
 			}
 
+			if (page === this.store.currentPage) {
+				this.store.currentPage = newPage
+			}
+
 			this.store.pages.splice(pageIndex, 1, newPage)
 		})
-
-		if (page === this.store.currentPage) {
-			this.store.currentPage = newPage
-		}
 
 		this._triggerAfterDefender(NT.RELOAD, page.route)
 	}
