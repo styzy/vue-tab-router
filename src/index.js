@@ -2,8 +2,27 @@ import Core from './Core'
 import components from '../packages'
 import './assets/stylus/iconfont.styl'
 
-const version = '0.4.2'
+const version = '0.4.3'
 class TabRouter {
+	static get version() {
+		return version
+	}
+	static install(Vue) {
+		Object.values(components).forEach(component => {
+			Vue.component(component.name, component)
+		})
+
+		Vue.mixin({
+			beforeCreate() {
+				if (
+					this.$options.tabRouter &&
+					this.$options.tabRouter instanceof TabRouter
+				) {
+					Vue.prototype.$tabRouter = this.$options.tabRouter
+				}
+			}
+		})
+	}
 	get core() {
 		return this._core
 	}
@@ -37,25 +56,6 @@ class TabRouter {
 	$on(...args) {
 		return this._core.on(...args)
 	}
-}
-
-TabRouter.version = version
-
-TabRouter.install = function (Vue) {
-	Object.values(components).forEach(component => {
-		Vue.component(component.name, component)
-	})
-
-	Vue.mixin({
-		beforeCreate() {
-			if (
-				this.$options.tabRouter &&
-				this.$options.tabRouter instanceof TabRouter
-			) {
-				Vue.prototype.$tabRouter = this.$options.tabRouter
-			}
-		}
-	})
 }
 
 export default TabRouter
