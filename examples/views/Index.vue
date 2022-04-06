@@ -124,6 +124,7 @@ $title-bar-height = 40px
 	width $menu-width
 	height 'calc(100% - %s)' % $header-height
 	border-right 1px solid $border-color
+	background-color #FFFFFF
 .title-bar
 	position fixed
 	top $header-height
@@ -137,4 +138,5 @@ $title-bar-height = 40px
 	padding-left $menu-width
 	width 100vw
 	height 100vh
+	background-color #FFFFFF
 </style>
