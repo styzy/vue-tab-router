@@ -60,7 +60,7 @@ const giudeRoutes = [
 		path: '/guide/eventListener',
 		component: () => import('@/doc/guide/eventListener.md'),
 		meta: {
-			new: true
+			update: true
 		}
 	},
 	{
@@ -122,10 +122,7 @@ const apiRoutes = [
 	{
 		title: 'TabRouter 实例方法',
 		path: '/api/TabRouter/methods',
-		component: () => import('@/doc/api/TabRouter.methods.md'),
-		meta: {
-			update: true
-		}
+		component: () => import('@/doc/api/TabRouter.methods.md')
 	},
 	{
 		title: 'TabRoute 实例属性',

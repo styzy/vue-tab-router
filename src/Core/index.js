@@ -52,11 +52,8 @@ class Core {
 			this.store.pages[pageIndex + 1] || this.store.pages[pageIndex - 1]
 		)
 	}
-	_createPageId() {
-		return `page-${this._pageIdSeed++}`
-	}
 	_createPage(route) {
-		return new Page({ id: this._createPageId(), route })
+		return new Page(route)
 	}
 	_addPage(page) {
 		this.store.pages.push(page)
@@ -73,7 +70,7 @@ class Core {
 		await this._focusPage(page)
 
 		await new Promise(resolve => {
-			page.insMounted = () => {
+			page.component.mounted = () => {
 				resolve()
 			}
 
@@ -98,24 +95,7 @@ class Core {
 	async _reloadPage(page) {
 		if (!(await this._triggerBeforeDefender(NT.RELOAD, page.route))) return
 
-		const newPage = this._createPage(page.route),
-			pageIndex = this.store.pages.findIndex(_page => _page === page),
-			eventListeners = Object.assign([], page.eventListeners)
-
-		page.cleanEventListener()
-
-		await new Promise(resolve => {
-			newPage.insMounted = () => {
-				newPage.copyEventListeners(eventListeners)
-				resolve()
-			}
-
-			if (page === this.store.currentPage) {
-				this.store.currentPage = newPage
-			}
-
-			this.store.pages.splice(pageIndex, 1, newPage)
-		})
+		page.component.reload()
 
 		this._triggerAfterDefender(NT.RELOAD, page.route)
 	}
@@ -127,14 +107,12 @@ class Core {
 			nextFocusPage = this._getNearbyPageByPage(page)
 		}
 
-		page.cleanEventListener()
-
 		const pageIndex = this.store.pages.findIndex(_page => _page === page)
 
 		if (pageIndex < 0) return
 
 		await new Promise(resolve => {
-			page.insDestroyed = () => {
+			page.component.destroyed = () => {
 				resolve()
 			}
 
@@ -192,26 +170,6 @@ class Core {
 		this._afterEachs.forEach(defender => {
 			defender(type, currentRoute, targetRoute)
 		})
-	}
-	_addEventListener(page, event, listener, once) {
-		const eventListener = new EventListener({
-			event,
-			listener,
-			once
-		})
-
-		page.addEventListener(eventListener)
-
-		return () => {
-			this._removeEventListenerByRoute(page.route, eventListener)
-		}
-	}
-	_removeEventListenerByRoute(route, eventListener) {
-		const page = this._getPageByRoute(route)
-
-		if (!page) return
-
-		page.removeEventListener(eventListener)
 	}
 	$error(error) {
 		try {
@@ -347,6 +305,10 @@ class Core {
 		}
 	}
 	on(_location, event, listener, once) {
+		console.log('_location: ', _location)
+		console.log('event: ', event)
+		console.log('listener: ', listener)
+		console.log('once: ', once)
 		try {
 			const location = new Location(_location),
 				route = this._getRouteByLocation(location, true)
@@ -354,20 +316,38 @@ class Core {
 			if (!route)
 				throw `无法匹配路由，错误的参数:${JSON.stringify(_location)}`
 
-			const page = this._getPageByRoute(route)
+			const eventListener = new EventListener({
+				event,
+				listener,
+				once
+			})
 
-			if (!page) throw `页面未渲染:${JSON.stringify(_location)}`
+			route.$addEventListener(eventListener)
 
-			return this._addEventListener(page, event, listener, once)
+			return () => {
+				route.$removeEventListener(
+					eventListener.event,
+					eventListener.listener
+				)
+			}
 		} catch (error) {
 			this.$error(`[on] ${error}`)
 		}
 	}
-	emit(route, event, payload) {
+	once(_location, event, listener) {
+		return this.on(_location, event, listener, true)
+	}
+	off(_location, event, listener) {
 		try {
-			this._triggerEventListener(route, event, payload)
+			const location = new Location(_location),
+				route = this._getRouteByLocation(location, true)
+
+			if (!route)
+				throw `无法匹配路由，错误的参数:${JSON.stringify(_location)}`
+
+			route.$removeEventListener(event, listener)
 		} catch (error) {
-			this.$error(`[emit] ${error}`)
+			this.$error(`[off] ${error}`)
 		}
 	}
 }

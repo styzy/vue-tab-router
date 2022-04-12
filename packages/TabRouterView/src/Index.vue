@@ -1,22 +1,22 @@
 <template lang="pug">
 .tab-router-view
 	.tab-router-view-wrapper(
-		v-for="page in currentPages"
+		v-for="page in pages"
 		v-show="page === currentPage"
 	)
-		component(
-			:is="page.component.name"
-			:key="page.component.name"
-			v-bind="page.route.$props ? page.route.query : {}"
-		)
+		TabRouterViewComponent(:page="page")
 </template>
 
 <script>
+import TabRouterViewComponent from './components/TabRouterViewComponent.vue'
+
 import { core } from '~/mixins'
-import { typeOf, deepClone } from '#'
 
 export default {
 	name: 'TabRouterView',
+	components: {
+		TabRouterViewComponent
+	},
 	mixins: [core],
 	props: {
 		default: {
@@ -28,70 +28,9 @@ export default {
 			default: ''
 		}
 	},
-	data() {
-		return {
-			componentNameSeed: 0,
-			currentPages: []
-		}
-	},
-	computed: {
-		useCache() {
-			return this.cache !== undefined
-		}
-	},
-	created() {
-		this.$watch('pages', async newPages => {
-			await Promise.all(
-				newPages.map(async newPage => {
-					if (
-						!this.currentPages.find(
-							oldPage => oldPage.id === newPage.id
-						)
-					) {
-						await this.register(newPage)
-					}
-				})
-			)
-
-			this.currentPages = Object.assign([], newPages)
-		})
-	},
 	mounted() {
 		if (this.default) {
 			this.$trCore.open(this.default)
-		}
-	},
-	methods: {
-		createComponentName() {
-			return `TabRouterViewComponent${this.componentNameSeed++}`
-		},
-		// 注册组件
-		async register(page) {
-			const componentName = this.createComponentName()
-			page.component.name = componentName
-			if (typeOf(page.route.$component) === 'Function') {
-				page.component.options = (await page.route.$component()).default
-			} else {
-				page.component.options = page.route.$component
-			}
-
-			page.component.options = deepClone(page.component.options)
-
-			page.component.options.mixins = page.component.options.mixins || []
-
-			page.component.options.mixins.push({
-				beforeCreate() {
-					page.insBeforeCreate(this)
-				},
-				mounted() {
-					page.insMounted()
-				},
-				destroyed() {
-					page.insDestroyed()
-				}
-			})
-			this.$options.components[componentName] = page.component.options
-			return page
 		}
 	},
 	destroyed() {

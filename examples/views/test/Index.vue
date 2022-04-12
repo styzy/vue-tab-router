@@ -111,13 +111,12 @@ export default {
 			})
 		},
 		on() {
-			this.$tabRouter.$on(
+			this.$tabRouter.$once(
 				this.path,
 				'toParent',
 				(payload1, payload2) => {
 					alert(`一次性 toParent:${payload1},${payload2}`)
-				},
-				true
+				}
 			)
 			const removeEventListener = this.$tabRouter.$on(
 				this.path,

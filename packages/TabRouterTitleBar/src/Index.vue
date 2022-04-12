@@ -37,8 +37,8 @@ import { px2number } from '#'
 export default {
 	name: 'TabRouterTitleBar',
 	components: {
-		TabRouterTitle: TabRouterTitle,
-		TabRouterTitleContextmenu: TabRouterTitleContextmenu
+		TabRouterTitle,
+		TabRouterTitleContextmenu
 	},
 	mixins: [core],
 	props: {

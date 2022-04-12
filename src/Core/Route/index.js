@@ -24,6 +24,9 @@ class Route {
 	get $component() {
 		return this._component
 	}
+	get $listeners() {
+		return this._listeners
+	}
 	get $location() {
 		return this._location
 	}
@@ -50,7 +53,26 @@ class Route {
 		this._meta = meta
 		this._props = !!props
 		this._component = component
+		this._listeners = {}
 		this._location = null
+	}
+	$addEventListener(eventListener) {
+		const { event } = eventListener
+
+		this._listeners[event] = this._listeners[event] || []
+		this._listeners[event].push(eventListener)
+	}
+	$removeEventListener(event, listener) {
+		const listeners = this._listeners[event]
+
+		if (!listeners) return
+
+		listeners.splice(
+			listeners.findIndex(
+				eventListener => eventListener.listener === listener
+			),
+			1
+		)
 	}
 	match(location, useWildcard) {
 		if (location.name !== undefined) {

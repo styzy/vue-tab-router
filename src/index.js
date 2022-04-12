@@ -2,7 +2,7 @@ import Core from './Core'
 import components from '../packages'
 import './assets/stylus/iconfont.styl'
 
-const version = '0.4.3'
+const version = '0.5.0'
 class TabRouter {
 	static get version() {
 		return version
@@ -55,6 +55,12 @@ class TabRouter {
 	}
 	$on(...args) {
 		return this._core.on(...args)
+	}
+	$once(...args) {
+		return this._core.once(...args)
+	}
+	$off(...args) {
+		return this._core.off(...args)
 	}
 }
 
