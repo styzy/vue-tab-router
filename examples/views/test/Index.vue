@@ -46,7 +46,8 @@
 		.item(@click="close") js 关闭
 		.item(@click="closeAll") js 全部关闭
 		.item(@click="openWithQuery") js 打开 携带query
-		.item(@click="on") 监听事件
+		.item(@click="on") 添加监听事件
+		.item(@click="off") 移除监听事件
 	.title-bar
 		TabRouterTitleBar
 			//- template(#title)
@@ -111,21 +112,13 @@ export default {
 			})
 		},
 		on() {
-			this.$tabRouter.$once(
-				this.path,
-				'toParent',
-				(payload1, payload2) => {
-					alert(`一次性 toParent:${payload1},${payload2}`)
-				}
-			)
-			const removeEventListener = this.$tabRouter.$on(
-				this.path,
-				'toParent',
-				() => {
-					alert(`removeEventListener`)
-					removeEventListener()
-				}
-			)
+			this.$tabRouter.$on(this.path, 'test', this.listener)
+		},
+		listener() {
+			console.log('listener')
+		},
+		off() {
+			this.$tabRouter.$off(this.path, 'test', this.listener)
 		}
 	}
 }

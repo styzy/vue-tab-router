@@ -2,8 +2,6 @@
 .test 
 	button(@click="emit") 触发事件
 	br
-	button(@click="$tabRouter.open('/test1')") 打开另一个标签页
-	br
 	input(v-model="time")
 	h3 route
 	p(v-for="routeAttr in routeAttrList")
@@ -56,7 +54,6 @@ export default {
 	mounted() {
 		console.log('mounted')
 		console.log(window.getComputedStyle(this.$el)['width'])
-		this.on()
 	},
 	beforeUpdate() {
 		console.log('beforeUpdate')
@@ -71,14 +68,8 @@ export default {
 		console.log('destroyed')
 	},
 	methods: {
-		on() {
-			this.$tabRouter.$on('/test', 'toTest1', payload => {
-				alert(`toTest1:${payload}`)
-			})
-		},
 		emit() {
-			this.$emit('toParent', 123, 456)
-			this.$emit('toTest1', 666)
+			this.$emit('test', 123, 456)
 		}
 	}
 }

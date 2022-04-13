@@ -11,7 +11,7 @@ class EventListener {
 		return this._once
 	}
 	constructor({ event, listener = () => {}, once = false } = {}) {
-		if (typeOf(listener) !== 'Function')
+		if (!(listener instanceof Function))
 			throw `listener类型为:${typeOf(listener)},必须为Function类型，`
 
 		this._once = !!once

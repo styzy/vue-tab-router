@@ -161,10 +161,10 @@ const testRoute = [
 		component: () => import('@/views/test/Module')
 	},
 	{
-		title: 'test1',
-		path: '/test1',
+		title: 'test2',
+		path: '/test2',
 		props: true,
-		component: () => import('@/views/test/Module')
+		component: () => import('@/views/test/Module2')
 	}
 ]
 

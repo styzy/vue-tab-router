@@ -305,10 +305,6 @@ class Core {
 		}
 	}
 	on(_location, event, listener, once) {
-		console.log('_location: ', _location)
-		console.log('event: ', event)
-		console.log('listener: ', listener)
-		console.log('once: ', once)
 		try {
 			const location = new Location(_location),
 				route = this._getRouteByLocation(location, true)
