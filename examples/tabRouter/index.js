@@ -155,16 +155,16 @@ const devRoute = [
 
 const testRoute = [
 	{
-		title: 'test',
-		path: '/test',
-		props: true,
-		component: () => import('@/views/test/Module')
-	},
-	{
 		title: 'test2',
 		path: '/test2',
 		props: true,
 		component: () => import('@/views/test/Module2')
+	},
+	{
+		title: 'test',
+		path: '/test',
+		props: true,
+		component: () => import('@/views/test/Module')
 	}
 ]
 

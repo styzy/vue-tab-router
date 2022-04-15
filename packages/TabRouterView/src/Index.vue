@@ -1,15 +1,15 @@
 <template lang="pug">
 .tab-router-view
-	.tab-router-view-wrapper(
-		v-for="page in pages"
-		v-show="page === currentPage"
+	TabRouterViewComponent(
+		:key="routeIndex"
+		:page="getPageByRoute(route)"
+		v-for="(route, routeIndex) in routes"
+		v-if="getPageByRoute(route)"
 	)
-		TabRouterViewComponent(:page="page")
 </template>
 
 <script>
 import TabRouterViewComponent from './components/TabRouterViewComponent.vue'
-
 import { core } from '~/mixins'
 
 export default {
@@ -28,6 +28,11 @@ export default {
 			default: ''
 		}
 	},
+	data() {
+		return {
+			pageList: []
+		}
+	},
 	mounted() {
 		if (this.default) {
 			this.$trCore.open(this.default)
@@ -35,13 +40,15 @@ export default {
 	},
 	destroyed() {
 		this.$trCore.$reset()
+	},
+	methods: {
+		getPageByRoute(route) {
+			return this.pages.find(page => page.route === route)
+		}
 	}
 }
 </script>
 <style lang="stylus">
 .tab-router-view
-	height 100%
-.tab-router-view-wrapper
-	overflow-y auto
 	height 100%
 </style>

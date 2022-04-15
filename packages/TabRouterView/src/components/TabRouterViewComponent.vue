@@ -1,15 +1,19 @@
 <template lang="pug">
-component(
-	:is="page.component.options"
-	:key="page.component.key"
-	v-bind="page.route.$props ? page.route.query : {}"
-	v-on="listeners"
-)
+.tab-router-view-component-wrapper(v-show="page === currentPage")
+	component(
+		:is="page.component.options"
+		:key="page.component.key"
+		v-bind="page.route.$props ? page.route.query : {}"
+		v-on="listeners"
+	)
 </template>
 
 <script>
+import { core } from '~/mixins'
+
 export default {
 	name: 'TabRouterViewComponent',
+	mixins: [core],
 	props: {
 		page: {
 			type: Object
@@ -54,3 +58,9 @@ export default {
 	}
 }
 </script>
+
+<style lang="stylus" scoped>
+.tab-router-view-component-wrapper
+	overflow-y auto
+	height 100%
+</style>
