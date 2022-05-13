@@ -14,7 +14,7 @@ module.exports = {
 	// <bool> - 默认值 true，表示在每个语句的末尾添加分号
 	semi: false,
 	// <bool> - 默认值 false，强制html每个属性单独一行
-	singleAttributePerLine: true,
+	singleAttributePerLine: false,
 	// <bool> - 默认值 false，true则表示使用单引号而不是双引号
 	singleQuote: true,
 	// <int> - 默认值 2，缩进级别的空格数
