@@ -1,10 +1,4 @@
 export default {
-	data() {
-		return {
-			core: null,
-			store: null
-		}
-	},
 	beforeCreate() {
 		this.$trCore = this.$tabRouter.core
 		this.$trStore = this.$tabRouter.core.store
