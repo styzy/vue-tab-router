@@ -18,10 +18,10 @@ export default {
 		// this.$tabRouter.$off('/test', 'test', this.listener)
 	},
 	focus() {
-		console.log('focus')
+		console.log('focus', this)
 	},
 	blur() {
-		console.log('blur')
+		console.log('blur', this)
 	},
 	methods: {
 		listener() {

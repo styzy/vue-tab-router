@@ -79,7 +79,7 @@ export default {
 			const hook =
 				this.componentIns.$options[this.isVisited ? 'focus' : 'blur']
 
-			hook && hook()
+			hook && hook.call(this.componentIns)
 		}
 	}
 }
