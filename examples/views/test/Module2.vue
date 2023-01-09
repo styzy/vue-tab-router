@@ -17,6 +17,12 @@ export default {
 	destroyed() {
 		// this.$tabRouter.$off('/test', 'test', this.listener)
 	},
+	focus() {
+		console.log('focus')
+	},
+	blur() {
+		console.log('blur')
+	},
 	methods: {
 		listener() {
 			console.log('test2 listener')

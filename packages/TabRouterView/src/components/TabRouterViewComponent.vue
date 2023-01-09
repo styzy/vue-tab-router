@@ -3,6 +3,8 @@
 	component(
 		:is="page.component.options"
 		:key="page.component.key"
+		@hook:mounted="componentMounted"
+		ref="component"
 		v-bind="page.route.$props ? page.route.query : {}"
 		v-on="listeners"
 	)
@@ -19,7 +21,15 @@ export default {
 			type: Object
 		}
 	},
+	data() {
+		return {
+			componentIns: null
+		}
+	},
 	computed: {
+		isVisited() {
+			return this.page === this.currentPage
+		},
 		listeners() {
 			const eventListeners = this.page.route.$listeners,
 				listeners = {}
@@ -33,6 +43,11 @@ export default {
 			}
 
 			return listeners
+		}
+	},
+	watch: {
+		isVisited() {
+			this.handleVisitedChange()
 		}
 	},
 	methods: {
@@ -54,6 +69,17 @@ export default {
 			eventListeners.forEach(({ event, listener }) => {
 				this.page.route.$removeEventListener(event, listener)
 			})
+		},
+		componentMounted() {
+			this.componentIns = this.$refs.component
+		},
+		handleVisitedChange() {
+			if (!this.componentIns) return
+
+			const hook =
+				this.componentIns.$options[this.isVisited ? 'focus' : 'blur']
+
+			hook && hook()
 		}
 	}
 }
