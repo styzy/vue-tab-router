@@ -58,10 +58,7 @@ const giudeRoutes = [
 	{
 		title: '事件监听和触发',
 		path: '/guide/eventListener',
-		component: () => import('@/doc/guide/eventListener.md'),
-		meta: {
-			update: true
-		}
+		component: () => import('@/doc/guide/eventListener.md')
 	},
 	{
 		title: '路由匹配规则',
@@ -71,7 +68,10 @@ const giudeRoutes = [
 	{
 		title: '导航守卫',
 		path: '/guide/defender',
-		component: () => import('@/doc/guide/defender.md')
+		component: () => import('@/doc/guide/defender.md'),
+		meta: {
+			update: true
+		}
 	}
 ]
 
