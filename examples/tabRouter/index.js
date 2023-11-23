@@ -68,10 +68,7 @@ const giudeRoutes = [
 	{
 		title: '导航守卫',
 		path: '/guide/defender',
-		component: () => import('@/doc/guide/defender.md'),
-		meta: {
-			update: true
-		}
+		component: () => import('@/doc/guide/defender.md')
 	}
 ]
 
@@ -122,7 +119,10 @@ const apiRoutes = [
 	{
 		title: 'TabRouter 实例方法',
 		path: '/api/TabRouter/methods',
-		component: () => import('@/doc/api/TabRouter.methods.md')
+		component: () => import('@/doc/api/TabRouter.methods.md'),
+		meta: {
+			update: true
+		}
 	},
 	{
 		title: 'TabRoute 实例属性',

@@ -18,6 +18,9 @@ class Route {
 	get meta() {
 		return this._meta
 	}
+	get $origin() {
+		return this._origin
+	}
 	get $props() {
 		return this._props
 	}
@@ -37,20 +40,23 @@ class Route {
 		this.title = title
 		this._query = query
 	}
-	constructor({
-		title = '',
-		name = '',
-		path = '',
-		component = null,
-		props = false,
-		meta = {}
-	} = {}) {
+	constructor(_route = {}) {
+		const {
+			title = '',
+			name = '',
+			path = '',
+			component = null,
+			props = false,
+			meta = {}
+		} = _route
+
 		this._defaultTitle = title
 		this._title = title
 		this._name = name
 		this._path = path
 		this._query = {}
 		this._meta = meta
+		this._origin = _route
 		this._props = !!props
 		this._component = component
 		this._listeners = {}

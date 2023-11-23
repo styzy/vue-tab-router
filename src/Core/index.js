@@ -5,6 +5,7 @@ import Page from './Page'
 import EventListener from './EventListener'
 import { NAVIGATE_TYPES as NT } from './CONSTANTS'
 import { typeOf } from '#'
+
 class Core {
 	get store() {
 		return this._store
@@ -344,6 +345,13 @@ class Core {
 			route.$removeEventListener(event, listener)
 		} catch (error) {
 			this.$error(`[off] ${error}`)
+		}
+	}
+	getRoutes() {
+		try {
+			return [...this.store.routes]
+		} catch (error) {
+			this.$error(`[getRoutes] ${error}`)
 		}
 	}
 }

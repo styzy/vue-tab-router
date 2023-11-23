@@ -1,8 +1,8 @@
 import Core from './Core'
 import components from '../packages'
 import './assets/stylus/iconfont.styl'
+import { version } from '../package.json'
 
-const version = '0.7.1'
 class TabRouter {
 	static get version() {
 		return version
@@ -61,6 +61,9 @@ class TabRouter {
 	}
 	$off(...args) {
 		return this._core.off(...args)
+	}
+	getRoutes(...args) {
+		return this._core.getRoutes(...args)
 	}
 }
 

@@ -1,13 +1,16 @@
 {
 	"compilerOptions": {
-		"target": "ESNext",
 		"module": "CommonJS",
+		"target": "ES6",
+		"allowSyntheticDefaultImports": false,
+		"strictNullChecks": true,
 		"baseUrl": "./",
 		"paths": {
-			"@/*": ["/examples/*"],
-			"~/*": ["/src/*"],
-			"#/*": ["/src/utils/*"]
+			"@/*": ["examples/*"],
+			"~/*": ["src/*"],
+			"#": ["src/utils"]
 		}
 	},
-	"exclude": ["node_modules", "dist", "lib"]
+	"exclude": ["node_modules", "dist", "lib"],
+	"include": ["src*/*"]
 }
