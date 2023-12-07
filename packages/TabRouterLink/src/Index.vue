@@ -29,7 +29,7 @@ export default {
 			return this.pages.some(page => page.route === this.route)
 		},
 		isVisited() {
-			return this.route === this.currentPages[this.route.router]
+			return this.route === this.currentPages[this.route.router]?.route
 		}
 	},
 	mounted() {
