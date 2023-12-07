@@ -46,6 +46,14 @@ const giudeRoutes = [
 		component: () => import('@/doc/guide/navigate.md')
 	},
 	{
+		title: '命名视图',
+		path: '/guide/named',
+		component: () => import('@/doc/guide/named.md'),
+		meta: {
+			new: true
+		}
+	},
+	{
 		title: '参数传递',
 		path: '/guide/query',
 		component: () => import('@/doc/guide/query.md')
@@ -86,12 +94,18 @@ const componentRoutes = [
 	{
 		title: 'TabRouterView',
 		path: '/component/TabRouterView',
-		component: () => import('@/doc/component/TabRouterView.md')
+		component: () => import('@/doc/component/TabRouterView.md'),
+		meta: {
+			update: true
+		}
 	},
 	{
 		title: 'TabRouterTitleBar',
 		path: '/component/TabRouterTitleBar',
-		component: () => import('@/doc/component/TabRouterTitleBar.md')
+		component: () => import('@/doc/component/TabRouterTitleBar.md'),
+		meta: {
+			update: true
+		}
 	}
 ]
 
@@ -104,30 +118,39 @@ const apiRoutes = [
 	{
 		title: 'TabRouter 构建选项',
 		path: '/api/TabRouter',
-		component: () => import('@/doc/api/TabRouter.md')
-	},
-	{
-		title: 'RouteConfig',
-		path: '/api/TabRouter/RouteConfig',
-		component: () => import('@/doc/api/TabRouter.RouteConfig.md')
-	},
-	{
-		title: 'TabRouter 实例属性',
-		path: '/api/TabRouter/props',
-		component: () => import('@/doc/api/TabRouter.props.md')
-	},
-	{
-		title: 'TabRouter 实例方法',
-		path: '/api/TabRouter/methods',
-		component: () => import('@/doc/api/TabRouter.methods.md'),
+		component: () => import('@/doc/api/TabRouter.md'),
 		meta: {
 			update: true
 		}
 	},
 	{
+		title: 'RouteConfig',
+		path: '/api/TabRouter/RouteConfig',
+		component: () => import('@/doc/api/TabRouter.RouteConfig.md'),
+		meta: {
+			update: true
+		}
+	},
+	{
+		title: 'TabRouter 实例属性',
+		path: '/api/TabRouter/props',
+		component: () => import('@/doc/api/TabRouter.props.md'),
+		meta: {
+			update: true
+		}
+	},
+	{
+		title: 'TabRouter 实例方法',
+		path: '/api/TabRouter/methods',
+		component: () => import('@/doc/api/TabRouter.methods.md')
+	},
+	{
 		title: 'TabRoute 实例属性',
 		path: '/api/TabRoute',
-		component: () => import('@/doc/api/TabRoute.md')
+		component: () => import('@/doc/api/TabRoute.md'),
+		meta: {
+			update: true
+		}
 	},
 	{
 		title: 'Location',
@@ -155,16 +178,30 @@ const devRoute = [
 
 const testRoute = [
 	{
-		title: 'test2',
-		path: '/test2',
+		title: 'module1',
+		path: '/module1',
+		props: true,
+		component: () => import('@/views/test/Module1')
+	},
+	{
+		title: 'module2',
+		path: '/module2',
 		props: true,
 		component: () => import('@/views/test/Module2')
 	},
 	{
-		title: 'test',
-		path: '/test',
+		router: 'sub',
+		title: 'module3',
+		path: '/module3',
 		props: true,
-		component: () => import('@/views/test/Module')
+		component: () => import('@/views/test/Module3')
+	},
+	{
+		router: 'sub',
+		title: 'module4',
+		path: '/module4',
+		props: true,
+		component: () => import('@/views/test/Module4')
 	}
 ]
 

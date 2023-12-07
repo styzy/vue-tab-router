@@ -1,9 +1,9 @@
 <script>
-import { core } from '~/mixins'
+import { pages, currentPages, $getRouteByLocation, $warn } from '~/mixins'
 
 export default {
 	name: 'TabRouterLink',
-	mixins: [core],
+	mixins: [pages, currentPages, $getRouteByLocation, $warn],
 	props: {
 		open: {
 			type: [String, Object],
@@ -23,14 +23,15 @@ export default {
 	},
 	computed: {
 		route() {
-			return this.$trCore.$getRoute(this.close || this.open || '') || {}
+			return this.$getRouteByLocation(this.close || this.open || '') || {}
 		},
 		isActive() {
 			return this.pages.some(page => page.route === this.route)
 		},
 		isVisited() {
-			if (!this.currentPage) return false
-			return this.currentPage.route === this.route
+			return Object.values(this.currentPages).some(
+				page => page.route === this.route
+			)
 		}
 	},
 	mounted() {

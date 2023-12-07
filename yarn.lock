@@ -1651,6 +1651,7 @@
     eslint-config-prettier "^6.0.0"
 
 "@vue/vue-loader-v15@npm:vue-loader@^15.9.7", vue-loader@^15.0.0:
+  name "@vue/vue-loader-v15"
   version "15.11.1"
   resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-15.11.1.tgz#dee91169211276ed43c5715caef88a56b1f497b0"
   integrity sha512-0iw4VchYLePqJfJu9s62ACWUXeSqM30SQqlIftbYWM3C+jpPcEHKSPUZBLjSF9au4HTHQ/naF6OGnO3Q/qGR3Q==
@@ -6346,10 +6347,10 @@ void-elements@^3.1.0:
   resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-3.1.0.tgz#614f7fbf8d801f0bb5f0661f5b2f5785750e4f09"
   integrity sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w==
 
-vue-cli-plugin-markdown-loader@~1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/vue-cli-plugin-markdown-loader/-/vue-cli-plugin-markdown-loader-1.5.0.tgz#d554b6bf7d1ef3e2d3f8aa6495db1c9d9815840a"
-  integrity sha512-ekjgbQkjtL8gvS4ck22t+NI/lT9FUobJq19sMV/qbMIZP9D6bLTKgIqN2QlQCvr4Q2gCSqRIq9hjsOyhYZi03w==
+vue-cli-plugin-markdown-loader@~1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/vue-cli-plugin-markdown-loader/-/vue-cli-plugin-markdown-loader-1.5.1.tgz#616149fde1ba4752bf8b635e964247fcaa1cbd07"
+  integrity sha512-mbWI+BUoqFbjHeTzFuBFlesxV8lY+fO1c+DKCbT7iqTtBMqHjJCbHN9NoElgkOZ5mjUIQ34+31TkhaS3m2LSCQ==
   dependencies:
     cheerio "^1.0.0-rc.10"
     github-markdown-css "^5.1.0"

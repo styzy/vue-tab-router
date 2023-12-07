@@ -15,7 +15,7 @@
 
 <script>
 export default {
-	name: 'TestModule',
+	name: 'Module1',
 	props: {
 		testProp: {
 			type: String,

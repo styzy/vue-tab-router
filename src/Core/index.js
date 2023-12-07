@@ -7,7 +7,7 @@ import { NAVIGATE_TYPES as NT } from './CONSTANTS'
 import { typeOf } from '#'
 
 class Core {
-	get store() {
+	get $store() {
 		return this._store
 	}
 	get NAVIGATE_TYPES() {
@@ -15,16 +15,18 @@ class Core {
 	}
 	constructor({
 		routes: _routes = [],
+		autoClean = true,
 		logEnable = process.env.NODE_ENV !== 'production'
 	} = {}) {
 		this._store = Vue.observable({
 			routes: [],
 			pages: [],
-			currentPage: null,
-			focusComplate: null
+			currentPages: {}
 		})
-		this._NAVIGATE_TYPES = NT
+		this._autoClean = autoClean
 		this._logEnable = !!logEnable
+		this._NAVIGATE_TYPES = NT
+		this._componentReferenceCount = 0
 		this._pageIdSeed = 0
 		this._beforeEachs = []
 		this._afterEachs = []
@@ -36,28 +38,36 @@ class Core {
 	}
 	_initRoutes(_routes) {
 		_routes.forEach(_route => {
-			this.store.routes.push(new Route(_route))
+			this.$store.routes.push(new Route(_route))
 		})
 	}
 	_getRouteByLocation(location, useWildcard) {
-		return this.store.routes.find(route =>
+		return this.$store.routes.find(route =>
 			route.match(location, useWildcard)
 		)
 	}
 	_getPageByRoute(route) {
-		return this.store.pages.find(page => page.route === route)
+		return this.$store.pages.find(page => page.route === route)
 	}
 	_getNearbyPageByPage(page) {
-		const pageIndex = this.store.pages.findIndex(_page => _page === page)
-		return (
-			this.store.pages[pageIndex + 1] || this.store.pages[pageIndex - 1]
-		)
+		const sameRouterPages = this.$getPagesByRouter(page.route.router)
+		const pageIndex = sameRouterPages.findIndex(_page => _page === page)
+		return sameRouterPages[pageIndex + 1] || sameRouterPages[pageIndex - 1]
+	}
+	_isCurrentPage(page) {
+		return this.$store.currentPages[page.route.router] === page
+	}
+	_setCurrentPage(page) {
+		Vue.set(this.$store.currentPages, page.route.router, page)
+	}
+	_getCurrentPageByRouter(router) {
+		return this.$store.currentPages[router]
 	}
 	_createPage(route) {
 		return new Page(route)
 	}
 	_addPage(page) {
-		this.store.pages.push(page)
+		this.$store.pages.push(page)
 
 		this._triggerAfterDefender(NT.OPEN, page.route)
 	}
@@ -79,18 +89,18 @@ class Core {
 		})
 	}
 	async _focusPage(page) {
-		if (page === this.store.currentPage) return
+		const currentPage = this._getCurrentPageByRouter(page.route.router)
+
+		if (page === currentPage) return
 
 		if (!(await this._triggerBeforeDefender(NT.FOCUS, page.route))) return
 
-		const lastCurrentPage = this.store.currentPage
-
-		this.store.currentPage = page
+		this._setCurrentPage(page)
 
 		this._triggerAfterDefender(
 			NT.FOCUS,
 			page.route,
-			lastCurrentPage ? lastCurrentPage.route : null
+			currentPage?.route || null
 		)
 	}
 	async _reloadPage(page) {
@@ -104,11 +114,11 @@ class Core {
 		if (!(await this._triggerBeforeDefender(NT.CLOSE, page.route))) return
 
 		let nextFocusPage = null
-		if (page === this.store.currentPage) {
+		if (this._isCurrentPage(page)) {
 			nextFocusPage = this._getNearbyPageByPage(page)
 		}
 
-		const pageIndex = this.store.pages.findIndex(_page => _page === page)
+		const pageIndex = this.$store.pages.findIndex(_page => _page === page)
 
 		if (pageIndex < 0) return
 
@@ -117,7 +127,7 @@ class Core {
 				resolve()
 			}
 
-			this.store.pages.splice(pageIndex, 1)
+			this.$store.pages.splice(pageIndex, 1)
 		})
 
 		this._triggerAfterDefender(NT.CLOSE, page.route)
@@ -142,9 +152,10 @@ class Core {
 		}
 	}
 	async _triggerBeforeDefender(type, targetRoute = null) {
-		const currentRoute = this.store.currentPage
-			? this.store.currentPage.route
-			: null
+		if (!targetRoute) return
+
+		const currentRoute =
+			this._getCurrentPageByRouter(targetRoute?.router)?.route || null
 
 		const resArray = await Promise.all(
 			this._beforeEachs.map(defender => {
@@ -164,9 +175,8 @@ class Core {
 	_triggerAfterDefender(
 		type,
 		targetRoute = null,
-		currentRoute = this.store.currentPage
-			? this.store.currentPage.route
-			: null
+		currentRoute = this._getCurrentPageByRouter(targetRoute?.router)
+			?.route || null
 	) {
 		this._afterEachs.forEach(defender => {
 			defender(type, currentRoute, targetRoute)
@@ -189,18 +199,26 @@ class Core {
 		}
 	}
 	$reset() {
-		try {
-			this.store.pages = []
-			this.store.currentPage = null
-		} catch (error) {
-			this.$error(`[$reset] ${error}`)
-		}
+		this.$store.pages = []
+		this.$store.currentPages = {}
 	}
-	$getRoute(location, useWildcard) {
+	$getRouteByLocation(location, useWildcard) {
 		if (!(location instanceof Location)) {
 			location = new Location(location)
 		}
 		return this._getRouteByLocation(location, useWildcard)
+	}
+	$getPagesByRouter(router) {
+		return this.$store.pages.filter(page => page.route.router === router)
+	}
+	$recordReference(isAdd = false) {
+		this._componentReferenceCount += isAdd ? 1 : -1
+
+		if (this._componentReferenceCount > 0) return
+
+		if (!this._autoClean) return
+
+		this.$reset()
 	}
 	async open(_location = '') {
 		try {
@@ -275,7 +293,7 @@ class Core {
 	}
 	async closeAll() {
 		try {
-			const pages = Object.assign([], this.store.pages).reverse()
+			const pages = Object.assign([], this.$store.pages).reverse()
 
 			for (let index = 0; index < pages.length; index++) {
 				const page = pages[index]
@@ -349,7 +367,7 @@ class Core {
 	}
 	getRoutes() {
 		try {
-			return [...this.store.routes]
+			return [...this.$store.routes]
 		} catch (error) {
 			this.$error(`[getRoutes] ${error}`)
 		}

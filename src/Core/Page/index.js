@@ -16,12 +16,12 @@ class Page {
 		return this._eventListeners
 	}
 	constructor(route) {
-		this._id = this._createId()
+		this._id = this.#createId()
 		this._route = route
 		this._component = new Component(route)
 		this._eventListeners = []
 	}
-	_createId() {
+	#createId() {
 		return `TabRouterPage-${++pageSeed}`
 	}
 }

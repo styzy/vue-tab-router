@@ -48,18 +48,33 @@
 		.item(@click="openWithQuery") js 打开 携带query
 		.item(@click="on") 添加监听事件
 		.item(@click="off") 移除监听事件
-	.title-bar
-		TabRouterTitleBar
-			//- template(#title)
-			//- .title 123
-			//- template(#title="{ route, focus }")
-			//- .title(@click="focus") {{ route.title }}
-			//- template(#contextmenu)
-			//- div 123
-			//- template(#contextmenu="{ close, route }")
-			//- div(@click="close") 关闭{{ route.title }}
-	.body
-		TabRouterView(:default="path")
+	.main
+		.block
+			.title-bar
+				TabRouterTitleBar
+					//- template(#title)
+					//- .title 123
+					//- template(#title="{ route, focus }")
+					//- .title(@click="focus") {{ route.title }}
+					//- template(#contextmenu)
+					//- div 123
+					//- template(#contextmenu="{ close, route }")
+					//- div(@click="close") 关闭{{ route.title }}
+			.view
+				TabRouterView(default="/module1")
+		.block
+			.title-bar
+				TabRouterTitleBar(name="sub")
+					//- template(#title)
+					//- .title 123
+					//- template(#title="{ route, focus }")
+					//- .title(@click="focus") {{ route.title }}
+					//- template(#contextmenu)
+					//- div 123
+					//- template(#contextmenu="{ close, route }")
+					//- div(@click="close") 关闭{{ route.title }}
+			.view
+				TabRouterView(default="/module3" name="sub")
 </template>
 
 <script>
@@ -160,25 +175,23 @@ $title-height = 40px
 			content ''
 		&:hover
 			background-color lighten(rgba($color-theme, 0.1), 50%)
-.title-bar
-	position fixed
-	left $menu-width
-	z-index 2
-	width 'calc(100vw - %s)' % $menu-width
-	height $title-height
-	.title
-		width 500px
-		height 50px
-		background-color $color-theme
-		color #FFFFFF
-		text-align center
-		line-height @height
-.body
-	baseScroll()
-
-	box-sizing border-box
-	padding-top $title-height
+.main
 	padding-left $menu-width
-	width 100vw
 	height 100vh
+	.block
+		height 50%
+	.title-bar
+		height $title-height
+		.title
+			width 500px
+			height 50px
+			background-color $color-theme
+			color #FFFFFF
+			text-align center
+			line-height @height
+	.view
+		baseScroll()
+
+		box-sizing border-box
+		height 'calc(100% - %s)' % $title-height
 </style>

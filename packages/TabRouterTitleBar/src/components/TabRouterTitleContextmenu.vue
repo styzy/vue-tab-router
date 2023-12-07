@@ -14,10 +14,11 @@
 			.tab-router-title-contextmenu-item(@click="close") 关闭
 </template>
 <script>
-import { core } from '~/mixins'
+import { currentPages } from '~/mixins'
+
 export default {
 	name: 'TabRouterTitleContextmenu',
-	mixins: [core],
+	mixins: [currentPages],
 	props: {
 		top: {
 			type: Number,
@@ -33,7 +34,7 @@ export default {
 	},
 	computed: {
 		isVisited() {
-			return this.page === this.currentPage
+			return this.page === this.currentPages[this.page.route.router]
 		}
 	},
 	methods: {

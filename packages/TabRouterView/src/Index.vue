@@ -3,29 +3,29 @@
 	TabRouterViewComponent(
 		:key="routeIndex"
 		:page="getPageByRoute(route)"
-		v-for="(route, routeIndex) in routes"
+		v-for="(route, routeIndex) in namedRoutes"
 		v-if="getPageByRoute(route)"
 	)
 </template>
 
 <script>
 import TabRouterViewComponent from './components/TabRouterViewComponent.vue'
-import { core } from '~/mixins'
+import { routes, pages, $recordReference } from '~/mixins'
 
 export default {
 	name: 'TabRouterView',
 	components: {
 		TabRouterViewComponent
 	},
-	mixins: [core],
+	mixins: [routes, pages, $recordReference],
 	props: {
 		default: {
 			type: [String, Object],
 			default: ''
 		},
-		id: {
+		name: {
 			type: String,
-			default: ''
+			default: 'default'
 		}
 	},
 	data() {
@@ -33,13 +33,15 @@ export default {
 			pageList: []
 		}
 	},
-	mounted() {
-		if (this.default) {
-			this.$trCore.open(this.default)
+	computed: {
+		namedRoutes() {
+			return this.routes.filter(route => route.router === this.name)
 		}
 	},
-	destroyed() {
-		this.$trCore.$reset()
+	mounted() {
+		if (this.default) {
+			this.$tabRouter.open(this.default)
+		}
 	},
 	methods: {
 		getPageByRoute(route) {

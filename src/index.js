@@ -1,7 +1,9 @@
 import Core from './Core'
 import components from '../packages'
+import packageJson from '../package.json'
 import './assets/stylus/iconfont.styl'
-import { version } from '../package.json'
+
+const { version } = packageJson
 
 class TabRouter {
 	static get version() {
@@ -14,6 +16,8 @@ class TabRouter {
 
 		Vue.mixin({
 			beforeCreate() {
+				if (this.$root !== this) return
+
 				if (
 					this.$options.tabRouter &&
 					this.$options.tabRouter instanceof TabRouter
@@ -53,6 +57,9 @@ class TabRouter {
 	afterEach(...args) {
 		return this._core.afterEach(...args)
 	}
+	getRoutes(...args) {
+		return this._core.getRoutes(...args)
+	}
 	$on(...args) {
 		return this._core.on(...args)
 	}
@@ -61,9 +68,6 @@ class TabRouter {
 	}
 	$off(...args) {
 		return this._core.off(...args)
-	}
-	getRoutes(...args) {
-		return this._core.getRoutes(...args)
 	}
 }
 

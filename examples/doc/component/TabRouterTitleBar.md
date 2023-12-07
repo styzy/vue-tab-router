@@ -6,6 +6,10 @@
 
 ## Props 属性
 
+### `name` : String
+
+通过设置 `name` 属性，可以指定 `<TabRouterTitleBar>` 组件渲染对应名称的命名视图的标签视图，默认值为 `default` 。
+
 ### `contextmenuDisbale` : Boolean
 
 `contextmenuDisbale` 属性可以指定当前组件是否禁用右键菜单，默认值 `false` 。

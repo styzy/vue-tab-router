@@ -2,15 +2,15 @@
 .tab-router-title-bar(ref="container")
 	.tab-router-title-bar-scroll-wrapper(
 		:style="{ marginLeft: `${scrollOffset}px` }"
-		@DOMMouseScroll.stop="scrollHandler"
-		@mousewheel.stop="scrollHandler"
+		@DOMMouseScroll.stop="handleScroll"
+		@mousewheel.stop="handleScroll"
 		ref="scrollWrapper"
 	)
 		TabRouterTitle(
 			:key="page.id"
 			:page="page"
 			@contextmenu="renderContextmenu"
-			v-for="page in pages"
+			v-for="page in namedPages"
 		)
 			template(#default="titleProps" v-if="$scopedSlots.title")
 				slot(name="title" v-bind="titleProps")
@@ -31,7 +31,7 @@
 <script>
 import TabRouterTitle from './components/TabRouterTitle'
 import TabRouterTitleContextmenu from './components/TabRouterTitleContextmenu'
-import { core } from '~/mixins'
+import { pages, currentPages, $recordReference } from '~/mixins'
 import { px2number } from '#'
 
 export default {
@@ -40,8 +40,12 @@ export default {
 		TabRouterTitle,
 		TabRouterTitleContextmenu
 	},
-	mixins: [core],
+	mixins: [pages, currentPages, $recordReference],
 	props: {
+		name: {
+			type: String,
+			default: 'default'
+		},
 		contextmenuDisbale: {
 			type: Boolean,
 			default: false
@@ -61,9 +65,14 @@ export default {
 		}
 	},
 	computed: {
+		namedPages() {
+			return this.pages.filter(page => page.route.router === this.name)
+		},
 		pageLength() {
-			if (!this.pages) return 0
-			return this.pages.length
+			return this.namedPages?.length || 0
+		},
+		currentPage() {
+			return this.currentPages[this.name]
 		}
 	},
 	created() {
@@ -77,9 +86,14 @@ export default {
 		})
 		this.$watch('currentPage', currentPage => {
 			if (!currentPage) return
-			const index = this.pages.findIndex(page => page === currentPage),
+
+			const index = this.namedPages.findIndex(
+					page => page === currentPage
+				),
 				{ isIn, isLeft } = this.isIndexTitleInView(index)
+
 			if (isIn) return
+
 			this.scrollToIndex(index, isLeft)
 		})
 	},
@@ -90,11 +104,13 @@ export default {
 		this.unbindWindowResize()
 	},
 	methods: {
-		scrollHandler(event = window.event) {
+		handleScroll(event = window.event) {
 			let wheelDelta = event.wheelDelta || -event.detail * 24,
 				isUp = wheelDelta > 0
 
 			this.scroll(isUp)
+
+			event.preventDefault && event.preventDefault()
 		},
 		scrollToTop() {
 			this.scroll(true, 999999999)
@@ -166,7 +182,7 @@ export default {
 				window.getComputedStyle(this.$refs.container)['width']
 			)
 		},
-		getTitleWidth(rangeStart = 0, rangeEnd = this.pages.length - 1) {
+		getTitleWidth(rangeStart = 0, rangeEnd = this.namedPages.length - 1) {
 			let width = 0,
 				el_titleList = this.$refs.scrollWrapper.children
 

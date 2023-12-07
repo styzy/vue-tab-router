@@ -1,10 +1,9 @@
 class Route {
+	get router() {
+		return this._router
+	}
 	get title() {
 		return this._title
-	}
-	set title(value) {
-		if (value === undefined) return
-		this._title = value
 	}
 	get name() {
 		return this._name
@@ -34,29 +33,33 @@ class Route {
 		return this._location
 	}
 	set $location(location) {
-		this._location = location
 		const { title, query } = location
 
-		this.title = title
+		this._location = location
 		this._query = query
+		if (title !== undefined) {
+			this._title = title
+		}
 	}
-	constructor(_route = {}) {
+	constructor(origin = {}) {
 		const {
+			router = 'default',
 			title = '',
 			name = '',
 			path = '',
 			component = null,
 			props = false,
 			meta = {}
-		} = _route
+		} = origin
 
-		this._defaultTitle = title
+		this._router = router
 		this._title = title
+		this._defaultTitle = title
 		this._name = name
 		this._path = path
 		this._query = {}
 		this._meta = meta
-		this._origin = _route
+		this._origin = origin
 		this._props = !!props
 		this._component = component
 		this._listeners = {}

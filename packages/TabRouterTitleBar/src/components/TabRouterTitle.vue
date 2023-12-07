@@ -22,11 +22,11 @@
 </template>
 
 <script>
-import { core } from '~/mixins'
+import { currentPages } from '~/mixins'
 
 export default {
 	name: 'TabRouterTitle',
-	mixins: [core],
+	mixins: [currentPages],
 	props: {
 		page: {
 			type: Object
@@ -34,7 +34,7 @@ export default {
 	},
 	computed: {
 		isVisited() {
-			return this.page === this.currentPage
+			return this.page === this.currentPages[this.page.route.router]
 		}
 	},
 	methods: {

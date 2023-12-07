@@ -1,10 +1,10 @@
 <template lang="pug">
-.test 已监听test页面事件
+.test Module2
 </template>
 
 <script>
 export default {
-	name: 'TestModule2',
+	name: 'Module2',
 	props: {
 		testProp: {
 			type: String,
@@ -12,10 +12,10 @@ export default {
 		}
 	},
 	mounted() {
-		this.$tabRouter.$on('/test', 'test', this.listener)
+		this.$tabRouter.$on('/module1', 'test', this.listener)
 	},
 	destroyed() {
-		// this.$tabRouter.$off('/test', 'test', this.listener)
+		this.$tabRouter.$off('/module1', 'test', this.listener)
 	},
 	focus() {
 		console.log('focus', this)
@@ -31,7 +31,4 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
-.test
-	padding 40px
-</style>
+<style lang="stylus" scoped></style>

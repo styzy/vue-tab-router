@@ -1,5 +1,5 @@
 <template lang="pug">
-.tab-router-view-component-wrapper(v-show="page === currentPage")
+.tab-router-view-component-wrapper(v-show="isVisited")
 	component(
 		:is="page.component.options"
 		:key="page.component.key"
@@ -11,11 +11,11 @@
 </template>
 
 <script>
-import { core } from '~/mixins'
+import { currentPages } from '~/mixins'
 
 export default {
 	name: 'TabRouterViewComponent',
-	mixins: [core],
+	mixins: [currentPages],
 	props: {
 		page: {
 			type: Object
@@ -28,7 +28,7 @@ export default {
 	},
 	computed: {
 		isVisited() {
-			return this.page === this.currentPage
+			return this.page === this.currentPages[this.page.route.router]
 		},
 		listeners() {
 			const eventListeners = this.page.route.$listeners,

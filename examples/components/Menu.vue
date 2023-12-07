@@ -64,6 +64,9 @@ export default {
 							path: '/guide/navigate'
 						},
 						{
+							path: '/guide/named'
+						},
+						{
 							path: '/guide/query'
 						},
 						{

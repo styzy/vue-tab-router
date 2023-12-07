@@ -1,9 +1,11 @@
 <template lang="pug">
-RouterView
+.test Module4
 </template>
 
 <script>
 export default {
-	name: 'App'
+	name: 'Module3'
 }
 </script>
+
+<style lang="stylus" scoped></style>
