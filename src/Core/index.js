@@ -185,16 +185,20 @@ class Core {
 	$error(error) {
 		try {
 			if (!this._logEnable) return
+			// eslint-disable-next-line
 			console.error(`[TabRouter] ${error}`)
 		} catch (error) {
+			// eslint-disable-next-line
 			console.error(`[TabRouter] [$error] ${error}`)
 		}
 	}
 	$warn(error) {
 		try {
 			if (!this._logEnable) return
+			// eslint-disable-next-line
 			console.warn(`[TabRouter] ${error}`)
 		} catch (error) {
+			// eslint-disable-next-line
 			console.warn(`[TabRouter] [$warn] ${error}`)
 		}
 	}

@@ -3,6 +3,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 export default {
 	name: 'Module2',
 	props: {

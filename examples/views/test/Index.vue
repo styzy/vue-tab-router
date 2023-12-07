@@ -78,7 +78,9 @@
 </template>
 
 <script>
+/* eslint-disable */
 import { routes } from '@/tabRouter'
+
 export default {
 	name: 'Test',
 	data() {
