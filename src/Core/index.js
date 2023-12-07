@@ -30,10 +30,15 @@ class Core {
 		this._pageIdSeed = 0
 		this._beforeEachs = []
 		this._afterEachs = []
+
 		try {
 			this._initRoutes(_routes)
 		} catch (error) {
 			this.$error(`[init] ${error}`)
+		}
+
+		if (process.env.NODE_ENV === 'development') {
+			window.__TAB_ROUTER_STORE__ = this._store
 		}
 	}
 	_initRoutes(_routes) {
@@ -59,6 +64,9 @@ class Core {
 	}
 	_setCurrentPage(page) {
 		Vue.set(this.$store.currentPages, page.route.router, page)
+	}
+	_removeCurrentPage(page) {
+		this.$store.currentPages[page.route.router] = null
 	}
 	_getCurrentPageByRouter(router) {
 		return this.$store.currentPages[router]
@@ -134,6 +142,8 @@ class Core {
 
 		if (nextFocusPage) {
 			await this._focusPage(nextFocusPage)
+		} else {
+			this._removeCurrentPage(page)
 		}
 	}
 	_addDefender(defender, isBefore) {
