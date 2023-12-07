@@ -89,11 +89,11 @@ class Core {
 		})
 	}
 	async _focusPage(page) {
+		if (!(await this._triggerBeforeDefender(NT.FOCUS, page.route))) return
+
 		const currentPage = this._getCurrentPageByRouter(page.route.router)
 
 		if (page === currentPage) return
-
-		if (!(await this._triggerBeforeDefender(NT.FOCUS, page.route))) return
 
 		this._setCurrentPage(page)
 

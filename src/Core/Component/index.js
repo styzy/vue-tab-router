@@ -21,7 +21,7 @@ class Component {
 		this._initOptions(route)
 	}
 	_createKey() {
-		return `TabRouterViewComponent${++keySeed}`
+		return `TabRouterViewComponent-${++keySeed}`
 	}
 	async _initOptions(route) {
 		const that = this

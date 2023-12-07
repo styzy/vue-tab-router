@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Vue from 'vue'
 import VueTabRouter from '~'
 // import VueTabRouter from '/lib/vue-tab-router.common.js'
@@ -219,23 +220,6 @@ const tabRouter = new VueTabRouter({
 	routes
 })
 
-const beforeOpen = (current, target, next) => {
-		next()
-	},
-	beforeClose = (current, target, next) => {
-		if (target.meta && target.meta.closeDisabled) {
-			next(false)
-		} else {
-			next()
-		}
-	},
-	beforeFocus = (current, target, next) => {
-		next()
-	},
-	beforeReload = (current, target, next) => {
-		next()
-	}
-
 tabRouter.beforeEach((type, ...args) => {
 	const TYPES = tabRouter.NAVIGATE_TYPES
 
@@ -250,6 +234,54 @@ tabRouter.beforeEach((type, ...args) => {
 			return beforeClose(...args)
 	}
 })
+
+tabRouter.afterEach((type, ...args) => {
+	const TYPES = tabRouter.NAVIGATE_TYPES
+
+	switch (type) {
+		case TYPES.OPEN:
+			return afterOpen(...args)
+		case TYPES.FOCUS:
+			return afterFocus(...args)
+		case TYPES.RELOAD:
+			return afterReload(...args)
+		case TYPES.CLOSE:
+			return afterClose(...args)
+	}
+})
+
+const beforeOpen = (current, target, next) => {
+		console.log('global beforeOpen')
+		next()
+	},
+	beforeFocus = (current, target, next) => {
+		console.log('global beforeFocus')
+		next()
+	},
+	beforeReload = (current, target, next) => {
+		console.log('global beforeReload')
+		next()
+	},
+	beforeClose = (current, target, next) => {
+		console.log('global beforeClose')
+		if (target.meta && target.meta.closeDisabled) {
+			next(false)
+		} else {
+			next()
+		}
+	},
+	afterOpen = () => {
+		console.log('global afterOpen')
+	},
+	afterFocus = () => {
+		console.log('global afterFocus')
+	},
+	afterReload = () => {
+		console.log('global afterReload')
+	},
+	afterClose = () => {
+		console.log('global afterClose')
+	}
 
 export { routes }
 

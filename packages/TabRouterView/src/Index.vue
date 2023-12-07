@@ -1,9 +1,9 @@
 <template lang="pug">
 .tab-router-view
 	TabRouterViewComponent(
-		:key="routeIndex"
+		:key="route.id"
 		:page="getPageByRoute(route)"
-		v-for="(route, routeIndex) in namedRoutes"
+		v-for="route in namedRoutes"
 		v-if="getPageByRoute(route)"
 	)
 </template>

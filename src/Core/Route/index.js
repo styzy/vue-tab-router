@@ -1,4 +1,9 @@
+let routeSeed = 0
+
 class Route {
+	get id() {
+		return this._id
+	}
 	get router() {
 		return this._router
 	}
@@ -52,6 +57,7 @@ class Route {
 			meta = {}
 		} = origin
 
+		this._id = this.#createId()
 		this._router = router
 		this._title = title
 		this._defaultTitle = title
@@ -64,6 +70,9 @@ class Route {
 		this._component = component
 		this._listeners = {}
 		this._location = null
+	}
+	#createId() {
+		return `TabRouterRoute-${++routeSeed}`
 	}
 	$addEventListener(eventListener) {
 		const { event } = eventListener
