@@ -1,4 +1,12 @@
-module.exports = {
-	presets: ['@babel/preset-env', '@vue/cli-plugin-babel/preset'],
-	plugins: [['@babel/proposal-class-properties', { loose: true }]]
+const presets = ['@vue/cli-plugin-babel/preset']
+
+const plugins = []
+
+module.exports = api => {
+	api.cache(false)
+
+	return {
+		presets,
+		plugins
+	}
 }
