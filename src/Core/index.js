@@ -123,6 +123,7 @@ class Core {
 
 		let nextFocusPage = null
 		if (this._isCurrentPage(page)) {
+			this._removeCurrentPage(page)
 			nextFocusPage = this._getNearbyPageByPage(page)
 		}
 
@@ -142,8 +143,6 @@ class Core {
 
 		if (nextFocusPage) {
 			await this._focusPage(nextFocusPage)
-		} else {
-			this._removeCurrentPage(page)
 		}
 	}
 	_addDefender(defender, isBefore) {
