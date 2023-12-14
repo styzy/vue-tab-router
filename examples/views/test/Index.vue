@@ -1,14 +1,10 @@
 <template lang="pug">
 .test
 	.menu
-		TabRouterLink(open="/module1")
-			.item module1 打开
-		TabRouterLink(focus="/module1")
-			.item module1 聚焦
-		TabRouterLink(reload="/module1")
-			.item module1 重载
-		TabRouterLink(close="/module1")
-			.item module1 关闭
+		.item(@click="open") module1 打开
+		.item(@click="focus") module1 聚焦
+		.item(@click="reload") module1 重载
+		.item(@click="close") module1 关闭
 		TabRouterLink(open="/module2")
 			.item module2 打开
 		TabRouterLink(close="/module2")
@@ -66,19 +62,15 @@ export default {
 	methods: {
 		async open() {
 			await this.$tabRouter.open('/module1')
-			console.log('open')
 		},
 		async focus() {
 			await this.$tabRouter.focus('/module1')
-			console.log('focus')
 		},
 		async reload() {
 			await this.$tabRouter.reload('/module1')
-			console.log('reload')
 		},
 		async close() {
 			await this.$tabRouter.close('/module1')
-			console.log('close')
 		},
 		async closeAll() {
 			await this.$tabRouter.closeAll()

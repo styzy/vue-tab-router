@@ -164,7 +164,6 @@ const devRoute = [
 
 const testRoute = [
 	{
-		router: 'test',
 		title: 'module1',
 		path: '/module1',
 		props: true,

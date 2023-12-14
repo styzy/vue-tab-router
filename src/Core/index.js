@@ -76,8 +76,6 @@ class Core {
 	}
 	_addPage(page) {
 		this.$store.pages.push(page)
-
-		this._triggerAfterDefender(NT.OPEN, page.route)
 	}
 	async _openPage(route, location) {
 		if (!(await this._triggerBeforeDefender(NT.OPEN, route))) return
@@ -94,6 +92,7 @@ class Core {
 			}
 
 			this._addPage(page)
+			this._triggerAfterDefender(NT.OPEN, page.route)
 		})
 	}
 	async _focusPage(page) {
@@ -101,9 +100,9 @@ class Core {
 
 		const currentPage = this._getCurrentPageByRouter(page.route.router)
 
-		if (page === currentPage) return
-
-		this._setCurrentPage(page)
+		if (page !== currentPage) {
+			this._setCurrentPage(page)
+		}
 
 		this._triggerAfterDefender(
 			NT.FOCUS,
