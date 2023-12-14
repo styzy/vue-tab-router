@@ -1,17 +1,21 @@
 # Location 
 
-## `name` : `String`
+路由的地址对象。
+
+## Location对象属性
+
+### `name` : `String`
 
 * 定义：需要匹配的命名路由的名称。
 
-## `path` : `String`
+### `path` : `String`
 
 * 定义：需要匹配的路由的匹配路径。
 
-## `title` : `String`
+### `title` : `String`
 
 * 定义：需要修改的路由标题。
 
-## `query` : `Object`
+### `query` : `Object`
 
 * 定义：路由携带的参数。

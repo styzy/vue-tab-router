@@ -33,6 +33,9 @@ class TabRouter {
 	get NAVIGATE_TYPES() {
 		return this._core.NAVIGATE_TYPES
 	}
+	get currentRoutes() {
+		return this._core.$getCurrentRoutes()
+	}
 	constructor(...args) {
 		this._core = new Core(...args)
 	}
@@ -59,6 +62,9 @@ class TabRouter {
 	}
 	getRoutes(...args) {
 		return this._core.getRoutes(...args)
+	}
+	getActiveRoutes(...args) {
+		return this._core.getActiveRoutes(...args)
 	}
 	$on(...args) {
 		return this._core.on(...args)

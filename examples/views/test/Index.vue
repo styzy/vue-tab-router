@@ -1,53 +1,28 @@
 <template lang="pug">
 .test
 	.menu
-		TabRouterLink
-		TabRouterLink(:open="path") 无slot
-		TabRouterLink(:open="path")
-			.item open
-		TabRouterLink(:close="path")
-			.item close
-		TabRouterLink
-			.item 无open和close
-		TabRouterLink(:close="path" :open="path")
-			.item open close
-		TabRouterLink(#default)
-			.item scopedSlot 无open 无cusom
-		TabRouterLink(#default custom)
-			.item scopedSlot 无open 无自定义跳转
-		TabRouterLink(
-			#default="{ route, navigate, isVisited, isActive }"
-			:open="path"
-			custom
-		)
-			.item(@click="navigate") scopedSlot
-		TabRouterLink(
-			#default="{ route, navigate, isVisited, isActive }"
-			:close="path"
-			:open="path"
-			custom
-		)
-			.item(@click="navigate") scopedSlot open close
-		TabRouterLink(
-			#default="{ route, navigate, isVisited, isActive }"
-			:close="path"
-			:open="path"
-			custom
-		)
-			.item(
-				:class="{ visited: isVisited, active: isActive }"
-				@click="navigate"
-			) scopedSlot open close 带样式
-		TabRouterLink(:open="pathList[pathIndex]")
-			.item(@click="dynamicOpen") 动态open
-		.item(@click="open") js 打开
-		.item(@click="focus") js 聚焦
-		.item(@click="reload") js 刷新
-		.item(@click="close") js 关闭
-		.item(@click="closeAll") js 全部关闭
-		.item(@click="openWithQuery") js 打开 携带query
-		.item(@click="on") 添加监听事件
-		.item(@click="off") 移除监听事件
+		TabRouterLink(open="/module1")
+			.item module1 打开
+		TabRouterLink(focus="/module1")
+			.item module1 聚焦
+		TabRouterLink(reload="/module1")
+			.item module1 重载
+		TabRouterLink(close="/module1")
+			.item module1 关闭
+		TabRouterLink(open="/module2")
+			.item module2 打开
+		TabRouterLink(close="/module2")
+			.item module2 关闭
+		TabRouterLink(open="/module3")
+			.item module3 打开
+		TabRouterLink(close="/module3")
+			.item module3 关闭
+		TabRouterLink(open="/module4")
+			.item module4 打开
+		TabRouterLink(close="/module4")
+			.item module4 关闭
+		.item(@click="closeAll") 关闭全部
+		.item(@click="getActiveRoutes") getActiveRoutes()
 	.main
 		.block
 			.title-bar
@@ -78,64 +53,39 @@
 </template>
 
 <script>
-/* eslint-disable */
-import { routes } from '@/tabRouter'
-
 export default {
 	name: 'Test',
 	data() {
-		return {
-			pathList: routes.map(route => route.path),
-			path: routes.map(route => route.path)[0],
-			pathIndex: 0
+		return {}
+	},
+	computed: {
+		currentRoutes() {
+			return this.$tabRouter.currentRoutes
 		}
 	},
-	mounted() {
-		this.on()
-	},
 	methods: {
-		dynamicOpen() {
-			this.pathIndex++
-			if (this.pathIndex == this.pathList.length) {
-				this.pathIndex = 0
-			}
-		},
 		async open() {
-			await this.$tabRouter.open(this.path)
+			await this.$tabRouter.open('/module1')
 			console.log('open')
 		},
 		async focus() {
-			await this.$tabRouter.focus(this.path)
+			await this.$tabRouter.focus('/module1')
 			console.log('focus')
 		},
 		async reload() {
-			await this.$tabRouter.reload(this.path)
+			await this.$tabRouter.reload('/module1')
 			console.log('reload')
 		},
 		async close() {
-			await this.$tabRouter.close(this.path)
+			await this.$tabRouter.close('/module1')
 			console.log('close')
 		},
 		async closeAll() {
 			await this.$tabRouter.closeAll()
 			console.log('closeAll')
 		},
-		openWithQuery() {
-			this.$tabRouter.open({
-				path: this.path,
-				query: {
-					testProp: Date.now().toString()
-				}
-			})
-		},
-		on() {
-			this.$tabRouter.$on(this.path, 'test', this.listener)
-		},
-		listener() {
-			console.log('listener')
-		},
-		off() {
-			this.$tabRouter.$off(this.path, 'test', this.listener)
+		getActiveRoutes() {
+			console.log('getActiveRoutes: ', this.$tabRouter.getActiveRoutes())
 		}
 	}
 }

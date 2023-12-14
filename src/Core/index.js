@@ -215,13 +215,13 @@ class Core {
 		this.$store.pages = []
 		this.$store.currentPages = {}
 	}
-	$getRouteByLocation(location, useWildcard) {
+	$getRouteByLocation(location, useWildcard = false) {
 		if (!(location instanceof Location)) {
 			location = new Location(location)
 		}
 		return this._getRouteByLocation(location, useWildcard)
 	}
-	$getPagesByRouter(router) {
+	$getPagesByRouter(router = '') {
 		return this.$store.pages.filter(page => page.route.router === router)
 	}
 	$recordReference(isAdd = false) {
@@ -232,6 +232,15 @@ class Core {
 		if (!this._autoClean) return
 
 		this.$reset()
+	}
+	$getCurrentRoutes() {
+		const currentRoutes = {}
+		for (const router in this.$store.currentPages) {
+			if (Object.hasOwnProperty.call(this.$store.currentPages, router)) {
+				currentRoutes[router] = this.$store.currentPages[router]?.route
+			}
+		}
+		return currentRoutes
 	}
 	async open(_location = '') {
 		try {
@@ -304,19 +313,21 @@ class Core {
 			this.$error(`[close] ${error}`)
 		}
 	}
-	async closeAll() {
+	async closeAll(router = '') {
 		try {
 			const pages = Object.assign([], this.$store.pages).reverse()
 
 			for (let index = 0; index < pages.length; index++) {
 				const page = pages[index]
-				await this._closePage(page)
+				if (page.route.router === router || !router) {
+					await this._closePage(page)
+				}
 			}
 		} catch (error) {
 			this.$error(`[closeAll] ${error}`)
 		}
 	}
-	beforeEach(defender) {
+	beforeEach(defender = () => {}) {
 		try {
 			if (typeOf(defender) !== 'Function') throw `参数必须为Function类型`
 
@@ -326,7 +337,7 @@ class Core {
 			this.$error(`[beforeEach] ${error}`)
 		}
 	}
-	afterEach(defender) {
+	afterEach(defender = () => {}) {
 		try {
 			if (typeOf(defender) !== 'Function') throw `参数必须为Function类型`
 
@@ -336,7 +347,7 @@ class Core {
 			this.$error(`[afterEach] ${error}`)
 		}
 	}
-	on(_location, event, listener, once) {
+	on(_location = '', event = '', listener = () => {}, once = false) {
 		try {
 			const location = new Location(_location),
 				route = this._getRouteByLocation(location, true)
@@ -362,10 +373,10 @@ class Core {
 			this.$error(`[on] ${error}`)
 		}
 	}
-	once(_location, event, listener) {
+	once(_location = '', event = '', listener = () => {}) {
 		return this.on(_location, event, listener, true)
 	}
-	off(_location, event, listener) {
+	off(_location = '', event = '', listener = () => {}) {
 		try {
 			const location = new Location(_location),
 				route = this._getRouteByLocation(location, true)
@@ -378,11 +389,22 @@ class Core {
 			this.$error(`[off] ${error}`)
 		}
 	}
-	getRoutes() {
+	getRoutes(router = '') {
 		try {
-			return [...this.$store.routes]
+			return [...this.$store.routes].filter(
+				route => route.router === router || !router
+			)
 		} catch (error) {
 			this.$error(`[getRoutes] ${error}`)
+		}
+	}
+	getActiveRoutes(router = '') {
+		try {
+			return this.$store.pages
+				.map(page => page.route)
+				.filter(route => route.router === router || !router)
+		} catch (error) {
+			this.$error(`[getActiveRoutes] ${error}`)
 		}
 	}
 }

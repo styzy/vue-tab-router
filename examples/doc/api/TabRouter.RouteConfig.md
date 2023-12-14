@@ -1,42 +1,46 @@
 # RouteConfig
 
-## `title` : `String`
+`RouteConfig` 包含了一个路由所有的配置项，通过对这些配置项的定义，可以指定路由不同的行为。
+
+## 配置项参数
+
+### `title` : `String`
 
 * 默认值：`''`
 
 * 定义：路由视图的标题文本。
 
-## `name` : `String`
+### `name` : `String`
 
 * 默认值：`''`
 
 * 定义：命名路由的名称。
 
-## `path` : `String`
+### `path` : `String`
 
 * 默认值：`''`
 
 * 定义：路由的匹配路径。
 
-## `router` : `String`
+### `router` : `String`
 
 * 默认值：`default`
 
 * 定义：路由所对应的命名视图的名称，通过该属性，可以指定当前路由使用某个特定的命名视图渲染。
 
-## `component` : `Component`
+### `component` : `Component`
 
 * 默认值：`null`
 
 * 定义：路由的渲染组件，可以是直接引入的`.vue`文件，或者是`()=>import('...')`的异步引入方法。
 
-## `props` : `Boolean`
+### `props` : `Boolean`
 
 * 默认值：`false`
 
 * 定义：定义路由的`query`参数是否直接注入到渲染组件的`Props`中。
 
-## `meta` : `Any`
+### `meta` : `Any`
 
 * 默认值：`{}`
 
