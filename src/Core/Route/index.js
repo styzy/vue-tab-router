@@ -38,13 +38,11 @@ class Route {
 		return this._location
 	}
 	set $location(location) {
-		const { title, query } = location
+		const { title = this._title, query = this._query } = location
 
 		this._location = location
+		this._title = title
 		this._query = query
-		if (title !== undefined) {
-			this._title = title
-		}
 	}
 	constructor(origin = {}) {
 		const {

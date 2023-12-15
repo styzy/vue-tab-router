@@ -1,6 +1,6 @@
 {
 	"name": "@styzy/vue-tab-router",
-	"version": "0.9.1",
+	"version": "0.9.2",
 	"description": "A Tab Router Plugins For Vue.js",
 	"keywords": [
 		"vue",

@@ -20,7 +20,7 @@ class Location {
 			}
 		}
 
-		const { name, path, query = {}, title } = options
+		const { name, path, query, title } = options
 
 		// if (path === '*') throw `path不可使用通配符'*'`
 

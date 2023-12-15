@@ -95,8 +95,12 @@ class Core {
 			this._triggerAfterDefender(NT.OPEN, page.route)
 		})
 	}
-	async _focusPage(page) {
+	async _focusPage(page, location) {
 		if (!(await this._triggerBeforeDefender(NT.FOCUS, page.route))) return
+
+		if (location) {
+			page.route.$location = location
+		}
 
 		const currentPage = this._getCurrentPageByRouter(page.route.router)
 
@@ -110,9 +114,10 @@ class Core {
 			currentPage?.route || null
 		)
 	}
-	async _reloadPage(page) {
+	async _reloadPage(page, location) {
 		if (!(await this._triggerBeforeDefender(NT.RELOAD, page.route))) return
 
+		page.route.$location = location
 		page.component.reload()
 
 		this._triggerAfterDefender(NT.RELOAD, page.route)
@@ -252,8 +257,7 @@ class Core {
 			let page = this._getPageByRoute(route)
 
 			if (page) {
-				route.$location = location
-				await this._focusPage(page)
+				await this._focusPage(page, location)
 			} else {
 				await this._openPage(route, location)
 			}
@@ -273,7 +277,7 @@ class Core {
 
 			if (!page) throw `页面未渲染:${JSON.stringify(_location)}`
 
-			await this._focusPage(page)
+			await this._focusPage(page, location)
 		} catch (error) {
 			this.$error(`[focus] ${error}`)
 		}
@@ -290,7 +294,7 @@ class Core {
 
 			if (!page) throw `页面未渲染:${JSON.stringify(_location)}`
 
-			await this._reloadPage(page)
+			await this._reloadPage(page, location)
 		} catch (error) {
 			this.$error(`[reload] ${error}`)
 		}

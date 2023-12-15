@@ -61,16 +61,28 @@ export default {
 	},
 	methods: {
 		async open() {
-			await this.$tabRouter.open('/module1')
+			await this.$tabRouter.open({
+				path: '/module1',
+				query: {
+					propTime: Date.now()
+				}
+			})
 		},
 		async focus() {
-			await this.$tabRouter.focus('/module1')
+			await this.$tabRouter.focus({
+				path: '/module1'
+			})
 		},
 		async reload() {
-			await this.$tabRouter.reload('/module1')
+			await this.$tabRouter.reload({
+				path: '/module1',
+				query: {
+					propTime: Date.now()
+				}
+			})
 		},
 		async close() {
-			await this.$tabRouter.close('/module1')
+			await this.$tabRouter.close({ path: '/module1' })
 		},
 		async closeAll() {
 			await this.$tabRouter.closeAll()

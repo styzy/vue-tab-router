@@ -1,31 +1,25 @@
 <template lang="pug">
-.test 
-	button(@click="emit") 触发事件
-	br
-	input(v-model="time")
-	h3 route
-	p(v-for="routeAttr in routeAttrList")
-		span.key {{ routeAttr.key }}：
-		span.value {{ routeAttr.value }}
+.test
+	p mountedTime: {{ mountedTime }}
 	h3 props
 	p(v-for="propAttr in propAttrList")
 		span.key {{ propAttr.key }}：
 		span.value {{ propAttr.value }}
+	h3 route
+	p(v-for="routeAttr in routeAttrList")
+		span.key {{ routeAttr.key }}：
+		span.value {{ routeAttr.value }}
+	button(@click="emit") 触发事件
 </template>
 
 <script>
 /* eslint-disable */
 export default {
 	name: 'Module1',
-	props: {
-		testProp: {
-			type: String,
-			default: 'a'
-		}
-	},
+	props: ['propTime'],
 	data() {
 		return {
-			time: Date.now()
+			mountedTime: ''
 		}
 	},
 	computed: {
@@ -54,7 +48,8 @@ export default {
 	},
 	mounted() {
 		console.log('mounted')
-		console.log(window.getComputedStyle(this.$el)['width'])
+		// console.log(window.getComputedStyle(this.$el)['width'])
+		this.mountedTime = Date.now()
 	},
 	beforeUpdate() {
 		console.log('beforeUpdate')
