@@ -1,13 +1,12 @@
 import Core from './Core'
 import components from '../packages'
-import packageJson from '../package.json'
+import { GLOBAL_INJECTS } from './Core/CONSTANTS'
+import PACKAGE_JSON from '../package.json'
 import './assets/stylus/iconfont.styl'
-
-const { version } = packageJson
 
 class TabRouter {
 	static get version() {
-		return version
+		return PACKAGE_JSON.version
 	}
 	static install(Vue) {
 		Object.values(components).forEach(component => {
@@ -15,6 +14,12 @@ class TabRouter {
 		})
 
 		Vue.mixin({
+			inject: {
+				$tabRoute: {
+					from: GLOBAL_INJECTS.ROUTE,
+					default: null
+				}
+			},
 			beforeCreate() {
 				if (this.$root !== this) return
 

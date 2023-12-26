@@ -10,12 +10,16 @@
 		span.key {{ routeAttr.key }}：
 		span.value {{ routeAttr.value }}
 	button(@click="emit") 触发事件
+	Children
 </template>
 
 <script>
 /* eslint-disable */
 export default {
 	name: 'Module1',
+	components: {
+		Children: () => import('@/components/test/Children.vue')
+	},
 	props: ['propTime'],
 	data() {
 		return {
@@ -74,4 +78,8 @@ export default {
 <style lang="stylus" scoped>
 .test
 	padding 40px
+	.key
+		color #888888
+	.value
+		color #424242
 </style>

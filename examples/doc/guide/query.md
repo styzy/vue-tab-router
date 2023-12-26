@@ -4,6 +4,10 @@
 
 在渲染视图直接子组件内，可以通过 `this.$tabRoute` 获取当前组件所对应的路由对象 `TabRoute` 实例
 
+:::success
+从 `0.9.3` 版本开始， `$tabRoute` 属性以 `注入(inject)` 的方式，在渲染视图的 `所有` 后代子组件内都可以访问到。
+:::
+
 ```html
 <TabRouterLink :open="{ name: 'User', path: '/user', query: {id: 1} }">
     <div class="menu-item">用户中心<div>
@@ -24,9 +28,7 @@ export default {
 }
 ```
 
-我想你注意到了 `query` 属性，是的，它和 `vue-router` 路由中的 `query` 一样，用于携带参数，它必须是一个对象类型。
-
-而在渲染视图的根基组件内（即在路由列表中配置的组件），你可以通过 `this.$tabRoute` 获取到当前路由中的 `query` 参数。
+我想你注意到了 `query` 属性，是的，它和 `vue-router` 路由中的 `query` 一样，用于携带参数，它必须是一个对象类型。你可以通过 `this.$tabRoute` 获取到当前路由中的 `query` 参数。
 
 至于 `params` 属性，因为标签页路由无法影响到页面的基础路径 `location.href` ，所以被遗弃了。
 

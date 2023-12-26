@@ -12,10 +12,16 @@
 
 <script>
 import { currentPages } from '~/mixins'
+import { GLOBAL_INJECTS } from '~/Core/CONSTANTS'
 
 export default {
 	name: 'TabRouterViewComponent',
 	mixins: [currentPages],
+	provide() {
+		return {
+			[GLOBAL_INJECTS.ROUTE]: this.page.route
+		}
+	},
 	props: {
 		page: {
 			type: Object

@@ -39,7 +39,6 @@ class Component {
 		options.mixins.push({
 			beforeCreate() {
 				that._instance = this
-				this.$tabRoute = route
 			},
 			mounted() {
 				that.mounted()

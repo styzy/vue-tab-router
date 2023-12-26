@@ -54,7 +54,10 @@ const giudeRoutes = [
 	{
 		title: '参数传递',
 		path: '/guide/query',
-		component: () => import('@/doc/guide/query.md')
+		component: () => import('@/doc/guide/query.md'),
+		meta: {
+			update: true
+		}
 	},
 	{
 		title: '编程式的导航',
@@ -120,18 +123,12 @@ const apiRoutes = [
 	{
 		title: 'TabRouter 实例属性',
 		path: '/api/TabRouter/props',
-		component: () => import('@/doc/api/TabRouter.props.md'),
-		meta: {
-			update: true
-		}
+		component: () => import('@/doc/api/TabRouter.props.md')
 	},
 	{
 		title: 'TabRouter 实例方法',
 		path: '/api/TabRouter/methods',
-		component: () => import('@/doc/api/TabRouter.methods.md'),
-		meta: {
-			update: true
-		}
+		component: () => import('@/doc/api/TabRouter.methods.md')
 	},
 	{
 		title: 'TabRoute 路由对象',
