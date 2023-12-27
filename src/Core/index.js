@@ -48,7 +48,7 @@ class Core {
 	}
 	_getRouteByLocation(location, useWildcard) {
 		return this.$store.routes.find(route =>
-			route.match(location, useWildcard)
+			route.$match(location, useWildcard)
 		)
 	}
 	_getPageByRoute(route) {
@@ -80,7 +80,7 @@ class Core {
 	async _openPage(route, location) {
 		if (!(await this._triggerBeforeDefender(NT.OPEN, route))) return
 
-		route.$location = location
+		route.$updateLocation(location)
 
 		const page = this._createPage(route)
 
@@ -99,7 +99,7 @@ class Core {
 		if (!(await this._triggerBeforeDefender(NT.FOCUS, page.route))) return
 
 		if (location) {
-			page.route.$location = location
+			page.route.$updateLocation(location)
 		}
 
 		const currentPage = this._getCurrentPageByRouter(page.route.router)
@@ -117,7 +117,7 @@ class Core {
 	async _reloadPage(page, location) {
 		if (!(await this._triggerBeforeDefender(NT.RELOAD, page.route))) return
 
-		page.route.$location = location
+		page.route.$updateLocation(location)
 		page.component.reload()
 
 		this._triggerAfterDefender(NT.RELOAD, page.route)

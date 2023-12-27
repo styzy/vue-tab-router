@@ -37,13 +37,6 @@ class Route {
 	get $location() {
 		return this._location
 	}
-	set $location(location) {
-		const { title = this._title, query = this._query } = location
-
-		this._location = location
-		this._title = title
-		this._query = query
-	}
 	constructor(origin = {}) {
 		const {
 			router = 'default',
@@ -90,12 +83,19 @@ class Route {
 			1
 		)
 	}
-	match(location, useWildcard) {
+	$match(location, useWildcard) {
 		if (location.name !== undefined) {
 			return this.name === location.name
 		}
 
 		return this.path === location.path || (useWildcard && this.path === '*')
+	}
+	$updateLocation(location = {}) {
+		const { title = this._title, query = this._query } = location
+
+		this._location = location
+		this._title = title
+		this._query = query
 	}
 }
 
