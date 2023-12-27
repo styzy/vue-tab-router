@@ -1,5 +1,6 @@
 <template lang="pug">
-.test Module2
+.test
+	h2 Module2
 </template>
 
 <script>

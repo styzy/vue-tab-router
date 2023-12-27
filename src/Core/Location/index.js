@@ -13,6 +13,9 @@ class Location {
 	get title() {
 		return this._title
 	}
+	get hasTitle() {
+		return this.title !== undefined
+	}
 	constructor(options = '') {
 		if (typeOf(options) === 'String') {
 			options = {
@@ -30,6 +33,19 @@ class Location {
 		this._path = path
 		this._query = query
 		this._title = title
+	}
+	$assign({
+		name = this.name,
+		path = this.path,
+		query = this.query,
+		title = this.title
+	} = {}) {
+		return new Location({
+			name,
+			path,
+			query,
+			title
+		})
 	}
 }
 

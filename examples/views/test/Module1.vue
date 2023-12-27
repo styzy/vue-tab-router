@@ -1,5 +1,6 @@
 <template lang="pug">
 .test
+	h2 Module1
 	p mountedTime: {{ mountedTime }}
 	h3 props
 	p(v-for="propAttr in propAttrList")
@@ -10,6 +11,8 @@
 		span.key {{ routeAttr.key }}：
 		span.value {{ routeAttr.value }}
 	button(@click="emit") 触发事件
+	br
+	button(@click="$tabRoute.$updateLocation({ title: '123', query: {} })") 修改location
 	Children
 </template>
 

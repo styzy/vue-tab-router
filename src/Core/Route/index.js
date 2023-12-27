@@ -1,3 +1,5 @@
+import Location from '../Location'
+
 let routeSeed = 0
 
 class Route {
@@ -8,7 +10,9 @@ class Route {
 		return this._router
 	}
 	get title() {
-		return this._title
+		if (this._location && this._location.hasTitle)
+			return this._location.title
+		return this._defaultTitle
 	}
 	get name() {
 		return this._name
@@ -17,7 +21,7 @@ class Route {
 		return this._path
 	}
 	get query() {
-		return this._query
+		return this._location.query || {}
 	}
 	get meta() {
 		return this._meta
@@ -50,11 +54,9 @@ class Route {
 
 		this._id = this.#createId()
 		this._router = router
-		this._title = title
 		this._defaultTitle = title
 		this._name = name
 		this._path = path
-		this._query = {}
 		this._meta = meta
 		this._origin = origin
 		this._props = !!props
@@ -85,17 +87,21 @@ class Route {
 	}
 	$match(location, useWildcard) {
 		if (location.name !== undefined) {
-			return this.name === location.name
+			return this._name === location.name
 		}
 
-		return this.path === location.path || (useWildcard && this.path === '*')
+		return (
+			this._path === location.path || (useWildcard && this._path === '*')
+		)
 	}
 	$updateLocation(location = {}) {
-		const { title = this._title, query = this._query } = location
+		if (this._location) {
+			location = this._location.$assign(location)
+		} else {
+			location = new Location(location)
+		}
 
 		this._location = location
-		this._title = title
-		this._query = query
 	}
 }
 
