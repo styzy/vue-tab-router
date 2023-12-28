@@ -1,4 +1,4 @@
-import { typeOf, deepClone } from '#'
+import { typeOf } from '#'
 
 let keySeed = 0
 
@@ -12,43 +12,45 @@ class Component {
 	get instance() {
 		return this._instance
 	}
-	constructor(route, { mounted = () => {}, destroyed = () => {} } = {}) {
+	get hooks() {
+		return this._hooks
+	}
+	constructor(route) {
 		this._key = this._createKey()
 		this._options = null
 		this._instance = null
-		this.mounted = mounted
-		this.destroyed = destroyed
+		this._hooks = {}
 		this._initOptions(route)
 	}
 	_createKey() {
 		return `TabRouterViewComponent-${++keySeed}`
 	}
 	async _initOptions(route) {
-		const that = this
-
 		let options = route.$component
 
 		if (typeOf(options) === 'Function') {
 			options = (await options()).default
 		}
 
-		options = deepClone(options)
-
-		options.mixins = options.mixins || []
-
-		options.mixins.push({
-			beforeCreate() {
-				that._instance = this
-			},
-			mounted() {
-				that.mounted()
-			},
-			destroyed() {
-				that.destroyed()
-			}
-		})
-
 		this._options = options
+	}
+	$setInstance(vm) {
+		if (this._instance) return
+
+		this._instance = vm
+	}
+	$addHook(name = '', hook = () => {}) {
+		if (!name) return
+
+		this._hooks[name] = hook
+	}
+	$getHook(name) {
+		return this._hooks[name] || null
+	}
+	$removeHook(name = '') {
+		if (!name) return
+
+		this._hooks[name] = null
 	}
 	reload() {
 		this._key = this._createKey()

@@ -87,9 +87,7 @@ class Core {
 		await this._focusPage(page)
 
 		await new Promise(resolve => {
-			page.component.mounted = () => {
-				resolve()
-			}
+			page.component.$addHook('mounted', resolve)
 
 			this._addPage(page)
 			this._triggerAfterDefender(NT.OPEN, page.route)
@@ -136,9 +134,7 @@ class Core {
 		if (pageIndex < 0) return
 
 		await new Promise(resolve => {
-			page.component.destroyed = () => {
-				resolve()
-			}
+			page.component.$addHook('destroyed', resolve)
 
 			this.$store.pages.splice(pageIndex, 1)
 		})

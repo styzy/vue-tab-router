@@ -3,7 +3,9 @@
 	component(
 		:is="page.component.options"
 		:key="page.component.key"
-		@hook:mounted="componentMounted"
+		@hook:created="handleComponentCreated"
+		@hook:destroyed="handleComponentDestroyed"
+		@hook:mounted="handleComponentMounted"
 		ref="component"
 		v-bind="page.route.$props ? page.route.query : {}"
 		v-on="listeners"
@@ -27,11 +29,6 @@ export default {
 			type: Object
 		}
 	},
-	data() {
-		return {
-			componentIns: null
-		}
-	},
 	computed: {
 		isVisited() {
 			return this.page === this.currentPages[this.page.route.router]
@@ -49,6 +46,9 @@ export default {
 			}
 
 			return listeners
+		},
+		componentIns() {
+			return this.page.component.instance
 		}
 	},
 	watch: {
@@ -76,9 +76,6 @@ export default {
 				this.page.route.$removeEventListener(event, listener)
 			})
 		},
-		componentMounted() {
-			this.componentIns = this.$refs.component
-		},
 		handleVisitedChange() {
 			if (!this.componentIns) return
 
@@ -86,6 +83,15 @@ export default {
 				this.componentIns.$options[this.isVisited ? 'focus' : 'blur']
 
 			hook && hook.call(this.componentIns)
+		},
+		handleComponentCreated() {
+			this.page.component.$setInstance(this.$refs.component)
+		},
+		handleComponentMounted() {
+			this.page.component.$getHook('mounted')?.()
+		},
+		handleComponentDestroyed() {
+			this.page.component.$getHook('destroyed')?.()
 		}
 	}
 }
