@@ -1,6 +1,7 @@
 <template lang="pug">
 .test
 	.menu
+		.item(@click="openWithoutQuery") module1 打开 无参数
 		.item(@click="open") module1 打开
 		.item(@click="focus") module1 聚焦
 		.item(@click="reload") module1 重载
@@ -60,6 +61,11 @@ export default {
 		}
 	},
 	methods: {
+		async openWithoutQuery() {
+			await this.$tabRouter.open({
+				path: '/module1'
+			})
+		},
 		async open() {
 			await this.$tabRouter.open({
 				path: '/module1',
