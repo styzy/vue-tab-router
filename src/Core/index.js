@@ -77,10 +77,10 @@ class Core {
 	_addPage(page) {
 		this.$store.pages.push(page)
 	}
-	async _openPage(route, location) {
+	async _openPage(route, location, isLocationForceUpdate) {
 		if (!(await this._triggerBeforeDefender(NT.OPEN, route))) return
 
-		route.$updateLocation(location)
+		route.$updateLocation(location, isLocationForceUpdate)
 
 		const page = this._createPage(route)
 
@@ -93,11 +93,11 @@ class Core {
 			this._triggerAfterDefender(NT.OPEN, page.route)
 		})
 	}
-	async _focusPage(page, location) {
+	async _focusPage(page, location, isLocationForceUpdate) {
 		if (!(await this._triggerBeforeDefender(NT.FOCUS, page.route))) return
 
 		if (location) {
-			page.route.$updateLocation(location)
+			page.route.$updateLocation(location, isLocationForceUpdate)
 		}
 
 		const currentPage = this._getCurrentPageByRouter(page.route.router)
@@ -253,9 +253,9 @@ class Core {
 			let page = this._getPageByRoute(route)
 
 			if (page) {
-				await this._focusPage(page, location)
+				await this._focusPage(page, location, true)
 			} else {
-				await this._openPage(route, location)
+				await this._openPage(route, location, true)
 			}
 		} catch (error) {
 			this.$error(`[open] ${error}`)

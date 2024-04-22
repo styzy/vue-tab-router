@@ -37,7 +37,7 @@ class Location {
 	$assign({
 		name = this.name,
 		path = this.path,
-		query = {},
+		query = this.query,
 		title = this.title
 	} = {}) {
 		return new Location({

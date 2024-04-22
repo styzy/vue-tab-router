@@ -94,14 +94,12 @@ class Route {
 			this._path === location.path || (useWildcard && this._path === '*')
 		)
 	}
-	$updateLocation(location = {}) {
-		if (this._location) {
-			location = this._location.$assign(location)
+	$updateLocation(location = {}, force = false) {
+		if (!this._location || force) {
+			this._location = new Location(location)
 		} else {
-			location = new Location(location)
+			this._location = this._location.$assign(location)
 		}
-
-		this._location = location
 	}
 }
 

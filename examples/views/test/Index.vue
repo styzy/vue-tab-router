@@ -1,10 +1,12 @@
 <template lang="pug">
 .test
 	.menu
-		.item(@click="openWithoutQuery") module1 打开 无参数
 		.item(@click="open") module1 打开
+		.item(@click="openWithoutQuery") module1 打开 无参数
 		.item(@click="focus") module1 聚焦
+		.item(@click="focusWithoutQuery") module1 聚焦 无参数
 		.item(@click="reload") module1 重载
+		.item(@click="reloadWithoutQuery") module1 重载 无参数
 		.item(@click="close") module1 关闭
 		TabRouterLink(open="/module2")
 			.item module2 打开
@@ -61,11 +63,6 @@ export default {
 		}
 	},
 	methods: {
-		async openWithoutQuery() {
-			await this.$tabRouter.open({
-				path: '/module1'
-			})
-		},
 		async open() {
 			await this.$tabRouter.open({
 				path: '/module1',
@@ -74,7 +71,20 @@ export default {
 				}
 			})
 		},
+		async openWithoutQuery() {
+			await this.$tabRouter.open({
+				path: '/module1'
+			})
+		},
 		async focus() {
+			await this.$tabRouter.focus({
+				path: '/module1',
+				query: {
+					propTime: Date.now()
+				}
+			})
+		},
+		async focusWithoutQuery() {
 			await this.$tabRouter.focus({
 				path: '/module1'
 			})
@@ -85,6 +95,11 @@ export default {
 				query: {
 					propTime: Date.now()
 				}
+			})
+		},
+		async reloadWithoutQuery() {
+			await this.$tabRouter.reload({
+				path: '/module1'
 			})
 		},
 		async close() {
@@ -123,6 +138,7 @@ $title-height = 40px
 		font-weight 700
 		line-height @height
 		cursor pointer
+		user-select none
 		&.active
 			background-color rgba($color-theme, 0.1)
 		&.visited:after
